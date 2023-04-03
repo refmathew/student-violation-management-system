@@ -7,3 +7,21 @@ body {
   font-size: 1.6rem;
   font-family: 'Poppins', sans-serif
 }
+
+::-webkit-scrollbar {
+  width: .8rem;
+  height: .8rem;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: .3rem;
+  background-color: #8b86bd;
+
+  &:hover {
+    background-color: #120e41;
+  }
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f2f2fd;
+}

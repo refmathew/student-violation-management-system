@@ -1,9 +1,9 @@
 <template>
   <q-page class="page__main">
     <form class="page__inputs">
-      <CustomInput type="text" placeholder="Last name" iconName="student"/>
-      <CustomInput type="password" placeholder="Student Id (Include dash. Ex: 18-00829)" iconName="studentId"/>
-      <CustomInput type="select" placeholder="Violation Type" iconName="violationType" :selectOptions="violationTypeOptions"/>
+      <CustomInput type="text" placeholder="Last name" iconName="student" validationCriteria="^[a-zA-Z]+$"/>
+      <CustomInput type="password" placeholder="Student Id (Include dash. Ex: 18-00829)" iconName="studentId" validationCriteria="\d\d-\d\d\d\d\d" validationErrorMessage="Please check input format"/>
+      <CustomInput type="select" placeholder="Violation Type" iconName="violationType" :selectOptions="violationTypeOptions" />
       <CustomInput type="select" placeholder="Guard on Duty" iconName="guardOnDuty" :selectOptions="guardOnDutyOptions"/>
     </form>
     <p class="page__footer">
@@ -37,7 +37,6 @@ const guardOnDutyOptions = [
     flex-direction: column
     gap: 2.4rem
     align-items: center
-
 
   &__footer
     margin-top: 4.8rem

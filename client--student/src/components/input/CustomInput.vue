@@ -1,27 +1,64 @@
 <template>
-  <div class="main-wrapper">
-    <div class="custom-input__wrapper" >
-      <div class="custom-input__icon-wrapper"
-        :class="{ 'custom-input__icon-wrapper--active': inputActive, 'custom-input__icon-wrapper--inactive': !inputActive }" 
-        v-html="inputIcons[props.iconName].icon"
-        ref="$icon" />
-      <input class="custom-input__input" 
-        :class="{ 'custom-input__input--select': props.type === 'select' }"
-        :placeholder="props.placeholder"
-        :type="props.type === 'select' ? 'text' : props.type" 
-        ref="$input" />
-      <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg"
-        class="custom-input__dropdown"
-        :class="{ 'custom-input__dropdown--active' : selectActive }"
-        v-if="props.type === 'select'"
-        ref="$dropdown" >
-        <path d="M8.66655 10.8539C8.12755 11.2735 7.8612 11.2702 7.3332 10.8481L1.49825 6.70767C1.00158 6.31049 0.999967 5.83331 1.99986 5.83331H14C15 5.83331 15.0043 6.3161 14.4939 6.71356L8.66655 10.8539Z" fill="#8B86BD"/>
-      </svg>
+  <div class="custom-input__wrapper">
+    <div class="custom-input__g1">
+      <div class="custom-input-main__wrapper">
+        <div class="custom-input-main__icon-wrapper"
+          :class="{ 'custom-input-main__icon-wrapper--active': inputActive, 'custom-input-main__icon-wrapper--inactive': !inputActive }" 
+          v-html="inputIcons[props.iconName].icon"
+          ref="$icon"></div>
+        <input class="custom-input-main__input" 
+          :class="{ 'custom-input__input--select': props.type === 'select' }"
+          :placeholder="props.placeholder"
+          :type="props.type === 'select' ? 'text' : props.type" 
+          ref="$input" />
+        <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg"
+          class="custom-input-main__dropdown"
+          :class="{ 'custom-input-main__dropdown--active' : selectActive }"
+          v-if="props.type === 'select'"
+          ref="$dropdown" >
+          <path d="M8.66655 10.8539C8.12755 11.2735 7.8612 11.2702 7.3332 10.8481L1.49825 6.70767C1.00158 6.31049 0.999967 5.83331 1.99986 5.83331H14C15 5.83331 15.0043 6.3161 14.4939 6.71356L8.66655 10.8539Z" fill="#8B86BD"/>
+        </svg>
+      </div>
+      <p class="custom-input__invalid" 
+        :class="{ 'custom-input__invalid--active': valErrMesActive === true }"
+        v-if="props.type === 'select'" > 
+        <span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.0003 8.99999C11.0003 8.73478 11.1056 8.48042 11.2932 8.29289C11.4807 8.10535 11.7351 7.99999 12.0003 7.99999C12.2655 7.99999 12.5198 8.10535 12.7074 8.29289C12.8949 8.48042 13.0003 8.73478 13.0003 8.99999V11C13.0003 11.2652 12.8949 11.5196 12.7074 11.7071C12.5198 11.8946 12.2655 12 12.0003 12C11.7351 12 11.4807 11.8946 11.2932 11.7071C11.1056 11.5196 11.0003 11.2652 11.0003 11V8.99999ZM12.0003 13.5C11.6024 13.5 11.2209 13.658 10.9396 13.9393C10.6583 14.2206 10.5003 14.6022 10.5003 15C10.5003 15.3978 10.6583 15.7793 10.9396 16.0607C11.2209 16.342 11.6024 16.5 12.0003 16.5C12.3981 16.5 12.7796 16.342 13.0609 16.0607C13.3422 15.7793 13.5003 15.3978 13.5003 15C13.5003 14.6022 13.3422 14.2206 13.0609 13.9393C12.7796 13.658 12.3981 13.5 12.0003 13.5ZM10.4283 2.91799C10.5857 2.63968 10.8141 2.40815 11.0903 2.24705C11.3665 2.08595 11.6805 2.00107 12.0003 2.00107C12.32 2.00107 12.634 2.08595 12.9102 2.24705C13.1864 2.40815 13.4149 2.63968 13.5723 2.91799L21.7563 17.256C22.4523 18.476 21.5783 20 20.1823 20H3.82027C2.42427 20 1.55027 18.476 2.24627 17.256L10.4303 2.91599L10.4283 2.91799ZM12.0003 4.23799L4.16627 17.966H19.8343L12.0003 4.23799Z" fill="black"/>
+          </svg>
+        </span>
+        Select only from the given options 
+      </p>
+      <p class="custom-input__invalid" 
+        :class="{ 'custom-input__invalid--active': valErrMesActive }"
+        v-else-if="props.validationErrorMessage">
+        <span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.0003 8.99999C11.0003 8.73478 11.1056 8.48042 11.2932 8.29289C11.4807 8.10535 11.7351 7.99999 12.0003 7.99999C12.2655 7.99999 12.5198 8.10535 12.7074 8.29289C12.8949 8.48042 13.0003 8.73478 13.0003 8.99999V11C13.0003 11.2652 12.8949 11.5196 12.7074 11.7071C12.5198 11.8946 12.2655 12 12.0003 12C11.7351 12 11.4807 11.8946 11.2932 11.7071C11.1056 11.5196 11.0003 11.2652 11.0003 11V8.99999ZM12.0003 13.5C11.6024 13.5 11.2209 13.658 10.9396 13.9393C10.6583 14.2206 10.5003 14.6022 10.5003 15C10.5003 15.3978 10.6583 15.7793 10.9396 16.0607C11.2209 16.342 11.6024 16.5 12.0003 16.5C12.3981 16.5 12.7796 16.342 13.0609 16.0607C13.3422 15.7793 13.5003 15.3978 13.5003 15C13.5003 14.6022 13.3422 14.2206 13.0609 13.9393C12.7796 13.658 12.3981 13.5 12.0003 13.5ZM10.4283 2.91799C10.5857 2.63968 10.8141 2.40815 11.0903 2.24705C11.3665 2.08595 11.6805 2.00107 12.0003 2.00107C12.32 2.00107 12.634 2.08595 12.9102 2.24705C13.1864 2.40815 13.4149 2.63968 13.5723 2.91799L21.7563 17.256C22.4523 18.476 21.5783 20 20.1823 20H3.82027C2.42427 20 1.55027 18.476 2.24627 17.256L10.4303 2.91599L10.4283 2.91799ZM12.0003 4.23799L4.16627 17.966H19.8343L12.0003 4.23799Z" fill="black"/>
+          </svg>
+        </span>
+        {{ props.validationErrorMessage }}
+      </p>
+      <p class="custom-input__invalid" 
+        :class="{ 'custom-input__invalid--active': valErrMesActive }"
+        v-else > 
+        <span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.0003 8.99999C11.0003 8.73478 11.1056 8.48042 11.2932 8.29289C11.4807 8.10535 11.7351 7.99999 12.0003 7.99999C12.2655 7.99999 12.5198 8.10535 12.7074 8.29289C12.8949 8.48042 13.0003 8.73478 13.0003 8.99999V11C13.0003 11.2652 12.8949 11.5196 12.7074 11.7071C12.5198 11.8946 12.2655 12 12.0003 12C11.7351 12 11.4807 11.8946 11.2932 11.7071C11.1056 11.5196 11.0003 11.2652 11.0003 11V8.99999ZM12.0003 13.5C11.6024 13.5 11.2209 13.658 10.9396 13.9393C10.6583 14.2206 10.5003 14.6022 10.5003 15C10.5003 15.3978 10.6583 15.7793 10.9396 16.0607C11.2209 16.342 11.6024 16.5 12.0003 16.5C12.3981 16.5 12.7796 16.342 13.0609 16.0607C13.3422 15.7793 13.5003 15.3978 13.5003 15C13.5003 14.6022 13.3422 14.2206 13.0609 13.9393C12.7796 13.658 12.3981 13.5 12.0003 13.5ZM10.4283 2.91799C10.5857 2.63968 10.8141 2.40815 11.0903 2.24705C11.3665 2.08595 11.6805 2.00107 12.0003 2.00107C12.32 2.00107 12.634 2.08595 12.9102 2.24705C13.1864 2.40815 13.4149 2.63968 13.5723 2.91799L21.7563 17.256C22.4523 18.476 21.5783 20 20.1823 20H3.82027C2.42427 20 1.55027 18.476 2.24627 17.256L10.4303 2.91599L10.4283 2.91799ZM12.0003 4.23799L4.16627 17.966H19.8343L12.0003 4.23799Z" fill="black"/>
+          </svg>
+        </span>
+        Invalid input 
+      </p>
     </div>
     <ul class="custom-input-options__wrapper" 
       :class="{ 'custom-input-options__wrapper--active' : selectActive }"
-      v-if="props.type === 'select'">
-      <li class="custom-input-options__option" v-for="( option, key ) of props.selectOptions" :key="key"> {{ option }} </li>     
+      v-if="props.type === 'select'"
+      ref="$optionsWrapper">
+      <li class="custom-input-options__option" 
+        v-for="( option, key ) of props.selectOptions" 
+        :key="key"> 
+        {{ option }} 
+      </li>     
     </ul>
   </div>
 </template>
@@ -33,7 +70,9 @@ const props = defineProps({
   type: String,
   placeholder: String,
   iconName: String,
-  selectOptions: Object
+  selectOptions: Array,
+  validationErrorMessage: String,
+  validationCriteria: String
 });
 
 const inputIcons = {
@@ -67,6 +106,7 @@ const inputActive = ref(false);
 onMounted(()=>{
   $input.value.addEventListener('focus', ()=>{
     inputActive.value = true
+    $input.value.select()
   })
 
   $input.value.addEventListener('focusout', ()=>{
@@ -77,37 +117,30 @@ onMounted(()=>{
 })
 
 // =========================================================================== >
-
 /* Draw options for select input */
 
 const selectActive = ref(false)
+const $optionsWrapper = ref(null);
 
-if ( props.type === 'select' ) { onMounted (()=>{
-    const $options = document.querySelectorAll('.custom-input-options__option')
+onMounted (()=>{
+  if ( props.type === 'select' ) { 
+    const $options = $optionsWrapper.value.querySelectorAll('.custom-input-options__option')
 
     dropdownToggle($options);
     filterOptions($options);
-  })
-}
+  }
+})
 
 const dropdownToggle = ($options)=>{
   $input.value.addEventListener('focus', ()=>{
     selectActive.value = true
   }) 
 
-  $input.value.addEventListener('blur', (event)=>{
-    const $inputOptions = document.querySelector('.custom-input-options__wrapper')
-
-    if ( $inputOptions.contains(event.explicitOriginalTarget) ) {
-      clickListen($options);
-
-      setTimeout(()=>{
-        selectActive.value = false
-      }, 200);
-
-    } else {
+  $input.value.addEventListener('blur', ()=>{
+    clickListen($options)
+    setTimeout(()=>{
       selectActive.value = false
-    }
+    }, 200);
   }) 
 }
 
@@ -137,30 +170,84 @@ const $dropdown = ref(null);
 
 onMounted(()=>{
   $icon.value.addEventListener('click', ()=>{
-    $input.value.focus()
+    $input.value.select()
   })
 
   if ( props.type === 'select' ) {
     $dropdown.value.addEventListener('click', ()=>{
-      $input.value.focus()
-      selectActive.value = true
+      !selectActive.value ?  $input.value.select() : $input.value.focusout()
     })
   }
 })
 
 // =========================================================================== >
 
+/* Validation error message */
+
+const valErrMesActive = ref(false)
+
+onMounted(()=>{
+  if ( props.type === 'select' ) {
+    validateSelect()
+  } else {
+    validateNonSelect()
+  }
+})
+
+const validateSelect = ()=> {
+    let hasNoMatch = true
+
+    $input.value.addEventListener('blur', ()=>{
+      setTimeout(()=> {
+        hasNoMatch = true
+        props.selectOptions.forEach(( selectOption )=>{
+          if ( selectOption.toLowerCase() === $input.value.value.toLowerCase().trim() ){
+            return hasNoMatch = false 
+          }
+        })
+
+        const $options = $optionsWrapper.value.querySelectorAll('.custom-input-options__option')
+        $options.forEach(( $option )=>{
+          $option.addEventListener('click', ()=> { 
+            hasNoMatch = true
+          }) 
+        })
+
+        hasNoMatch ? valErrMesActive.value = true : valErrMesActive.value = false
+      }, 200)
+    })
+}
+
+const validateNonSelect = ()=> {
+  $input.value.addEventListener('blur', ()=> {
+    if ( props.validationCriteria ) {
+      const regex = new RegExp(props.validationCriteria)
+      !regex.test($input.value.value.trim().toLowerCase()) ? valErrMesActive.value = true : valErrMesActive.value = false
+    } else {
+      !$input.value.value ? valErrMesActive.value = true : valErrMesActive.value = false
+    }
+  })
+}
+
 </script>
 
 <style lang="sass">
-.main-wrapper 
+.custom-input__wrapper
   position: relative
   display: flex
   flex-direction: column
   align-items: center
   gap: .8rem
 
-.custom-input 
+
+.custom-input__g1
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+  gap: 1.6rem
+
+
+.custom-input-main
   &__wrapper
     display: flex
     gap: 1.2rem
@@ -176,9 +263,23 @@ onMounted(()=>{
   &__input
     color: $accent
 
+  &__input::placeholder
+    color: $primary-1 
+
+  &__input::selection
+    color: #fff
+    background-color: $accent
+
+  &__icon-wrapper
+    display: flex
+    align-items: center
+    cursor: pointer
+
+  &__icon-wrapper svg path
+    transition: fill 200ms ease-out
+
   &__icon-wrapper--active svg path
     fill: $accent
-    transition: fill 200ms ease
 
   &__icon-wrapper--inactive svg path
     fill: $primary-1
@@ -186,12 +287,39 @@ onMounted(()=>{
   &__dropdown
     width: 100%
     height: 100%
+    transition: transform 200ms ease-out
+    cursor: pointer
 
   &__dropdown--active
     transform: scaleY(-1)
 
   &__dropdown path
     fill: $accent
+
+
+.custom-input__invalid
+  display: none
+  margin-bottom: 0
+  padding-left: 2.4rem
+  font-size: 1.4rem
+  color: $warning
+
+  & span 
+    width: 2rem
+    height: 2rem
+    margin-right: 1.4rem
+
+  & span svg
+    width: 100%
+    height: 100%
+
+  & span svg path
+    fill: $warning
+
+  &--active
+    display: flex 
+    align-items: center
+    animation: custom-input__invalid--active 400ms ease-out 128ms
 
 
 .custom-input-options
@@ -202,26 +330,80 @@ onMounted(()=>{
     max-height: 20.6rem
     display: none
     flex-direction: column
-    gap: .2rem
-    overflow: scroll
+    gap: 2px
+    overflow-x: hidden
+    overflow-y: auto
     border-radius: 1.6rem
-    background-color: $secondary-1
+    background-color: #fff
     box-shadow: 0 .4rem 1.6rem 0 rgba($accent, .32)
 
   &__wrapper--active 
     z-index: 999
     display: flex
+    animation: custom-input-options__wrapper--active 200ms ease-out
+
+  &__wrapper::-webkit-scrollbar
+    width: .4rem
+    display: none
+
+  &__wrapper::-webkit-scrollbar-thumb
+    background: $accent
+    border-radius: .2rem
 
   &__option
     display: block
     padding: 1.6rem 3.2rem
+    background-color: $secondary-1
     font-weight: 300
     font-size: 1.4rem
     color: $accent
     text-align: left
     cursor: pointer
-    transition: background-color 800ms ease
+    transition: background-color 200ms ease
 
   &__option:hover
     background-color: #fff
+
+
+
+@keyframes custom-input-options__wrapper--active
+  0%
+    opacity: 0
+  100%
+    opacity: 1
+
+@keyframes custom-input__invalid--active
+  0%
+    opacity: 0
+    transform: translate(0)
+  10%
+    opacity: 1
+    transform: translate(-1rem)
+  20%
+    opacity: 1
+    transform: translate(0)
+  30%
+    opacity: 1
+    transform: translate(1rem)
+  40%
+    opacity: 1
+    transform: translate(-1rem)
+  50%
+    opacity: 1
+    transform: translate(0)
+  60%
+    opacity: 1
+    transform: translate(1rem)
+  70%
+    opacity: 1
+    transform: translate(-1rem)
+  80%
+    opacity: 1
+    transform: translate(0)
+  90%
+    opacity: 1
+    transform: translate(1rem)
+  100%
+    opacity: 1
+    transform: translate(0)
 </style>
