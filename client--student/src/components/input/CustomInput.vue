@@ -64,9 +64,10 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const props = defineProps({
+  name: String,
   type: String,
   placeholder: String,
   iconName: String,
@@ -74,6 +75,10 @@ const props = defineProps({
   validationErrorMessage: String,
   validationCriteria: String
 });
+
+const emit = defineEmits([
+  'validateInput'
+])
 
 const inputIcons = {
   course: {
@@ -117,6 +122,7 @@ onMounted(()=>{
 })
 
 // =========================================================================== >
+
 /* Draw options for select input */
 
 const selectActive = ref(false)
@@ -131,7 +137,7 @@ onMounted (()=>{
   }
 })
 
-const dropdownToggle = ($options)=>{
+const dropdownToggle = ($options)=> {
   $input.value.addEventListener('focus', ()=>{
     selectActive.value = true
   }) 
@@ -144,7 +150,7 @@ const dropdownToggle = ($options)=>{
   }) 
 }
 
-const filterOptions = ($options)=>{
+const filterOptions = ($options)=> {
   $input.value.addEventListener('input', ()=>{
     $options.forEach(($option)=>{
       !$option.textContent.toLowerCase().includes($input.value.value.toLowerCase()) ? $option.style.display = 'none' : $option.style.display = 'block'
@@ -152,8 +158,8 @@ const filterOptions = ($options)=>{
   })
 }
 
-const clickListen = ($options)=>{
-  $options.forEach(($option)=>{
+const clickListen = ($options)=> {
+  $options.forEach(($option)=> {
     $option.addEventListener('click', ()=>{
       $input.value.value = $option.textContent
       inputActive.value = true
@@ -168,13 +174,13 @@ const clickListen = ($options)=>{
 const $icon = ref(null);
 const $dropdown = ref(null);
 
-onMounted(()=>{
-  $icon.value.addEventListener('click', ()=>{
+onMounted(()=> {
+  $icon.value.addEventListener('click', ()=> {
     $input.value.select()
   })
 
   if ( props.type === 'select' ) {
-    $dropdown.value.addEventListener('click', ()=>{
+    $dropdown.value.addEventListener('click', ()=> {
       !selectActive.value ?  $input.value.select() : $input.value.focusout()
     })
   }
@@ -220,13 +226,85 @@ const validateSelect = ()=> {
 
 const validateNonSelect = ()=> {
   $input.value.addEventListener('blur', ()=> {
-    if ( props.validationCriteria ) {
-      const regex = new RegExp(props.validationCriteria)
-      !regex.test($input.value.value.trim().toLowerCase()) ? valErrMesActive.value = true : valErrMesActive.value = false
-    } else {
-      !$input.value.value ? valErrMesActive.value = true : valErrMesActive.value = false
+    validationFn()
+  })
+
+  watch(valErrMesActive, (newVEM)=> {
+    if ( newVEM ) {
+      $input.value.addEventListener('input', ()=> validationFn())
     }
   })
+}
+
+const validationFn = ()=> {
+  if ( props.validationCriteria ) {
+    const regex = new RegExp(props.validationCriteria)
+    !regex.test($input.value.value.trim().toLowerCase()) ? valErrMesActive.value = true : valErrMesActive.value = false
+  } else {
+    !$input.value.value ? valErrMesActive.value = true : valErrMesActive.value = false
+  }
+}
+
+// =========================================================================== >
+
+/* Emit event about validity of data */
+
+const validity = ref({
+  valid: false,
+  nonEmpty: false
+});
+
+watch(valErrMesActive, (newVal) => {
+  newVal ? validity.value.valid = false : validity.value.valid = true
+  const name = props.name;
+  emit('validateInput', {name, ...validity.value})
+})
+
+onMounted(() => {
+  const name = props.name;
+
+  $input.value.addEventListener('input', () => {
+    $input.value.value === '' || $input.value.value === undefined ? validity.value.nonEmpty = false : validity.value.nonEmpty = true
+    if ( props.type !== 'select' ) validate()
+    emit('validateInput', {name, ...validity.value})
+  })
+
+  if ( props.type === 'select' ) {
+    $input.value.addEventListener('blur', () =>{
+      let hasNoMatch = true
+
+      setTimeout(()=> {
+        hasNoMatch = true
+
+        props.selectOptions.forEach(( selectOption )=>{
+          if ( selectOption.toLowerCase() === $input.value.value.toLowerCase().trim() ){
+            return hasNoMatch = false 
+          }
+        })
+
+        const $options = $optionsWrapper.value.querySelectorAll('.custom-input-options__option')
+        $options.forEach(( $option )=>{
+          $option.addEventListener('click', ()=> { 
+            hasNoMatch = true
+            validity.value.nonEmpty = true
+          }) 
+        })
+
+        hasNoMatch ? validity.value.valid = false : validity.value.valid = true
+        emit('validateInput', {name, ...validity.value})
+      }, 200)
+    })
+  }
+})
+    
+
+const validate = () => {
+  if ( props.validationCriteria ) {
+    const regex = new RegExp(props.validationCriteria)
+    !regex.test($input.value.value.trim().toLowerCase()) ? validity.value.valid = false : validity.value.valid = true
+  } else {
+    !$input.value.value ? validity.value.valid = false : validity.value.valid = true  
+  }
 }
 
 </script>
