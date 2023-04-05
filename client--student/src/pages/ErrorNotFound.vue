@@ -20,13 +20,13 @@
       />
     </div>
   </div> -->
-    <div>nothing to see here</div>
+  <div>nothing to see here</div>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'ErrorNotFound'
-})
+  name: "ErrorNotFound",
+});
 </script>

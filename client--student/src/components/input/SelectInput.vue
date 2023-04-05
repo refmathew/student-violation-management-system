@@ -1,5 +1,3 @@
 <template>
-  <div>
-    selectinput
-  </div>
+  <div>selectinput</div>
 </template>

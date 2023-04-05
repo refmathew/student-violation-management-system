@@ -4,12 +4,12 @@
 
 <script setup>
 const props = defineProps({
-  text: String 
-})
+  text: String,
+});
 </script>
 
 <style scoped lang="sass">
-button 
+button
   padding: 1.6rem 16.6rem
   background-color: $accent
   border-radius: 1.6rem
@@ -24,4 +24,3 @@ button
   &:disabled
     box-shadow: 0 1.6rem 1.6rem rgba(#000, .16)
 </style>
-
