@@ -50,6 +50,7 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { useQuasar } from "quasar";
+import UserService from 'src/services/UserService';
 import CustomInput from 'src/components/input/CustomInput.vue';
 import CustomButton from 'src/components/CustomButton.vue';
 const $q = useQuasar();
@@ -64,29 +65,46 @@ const courseOptions = ref([
   'BSPH'
 ])
 
+const inputs = reactive({
+  studentId: {
+    inputValue: undefined,
+    isValid: false 
+  }, 
+  lastName: {
+    inputValue: undefined,
+    isValid: false 
+  }, 
+  firstName: {
+    inputValue: undefined,
+    isValid: false 
+  }, 
+  course: {
+    inputValue: undefined,
+    isValid: false 
+  }, 
+  year: {
+    inputValue: undefined,
+    isValid: false 
+  }, 
+})
+
 const yearOptions = ref(['1st', '2nd', '3rd', '4th']);
-
-const isValid = reactive({
-  studentId: false,
-  lastName: false,
-  firstName: false,
-  course: false,
-  year: false,
-});
-
 
 // =========================================================================== >
 
 const checkValidity = (e) => {
-  e.valid && e.nonEmpty ? (isValid[e.name] = true) : (isValid[e.name] = false);
-  console.log(isValid)
+  inputs[e.name].inputValue = e.value;
+  inputs[e.name].isValid = e.isValueValid;
 };
 
 const handleSubmit = () => {
   let areAllValid = true;
 
-  for (const item in isValid) {
-    if (isValid[item] === false) areAllValid = false;
+  for (const input in inputs) {
+    if ( !inputs[input].inputValue || !inputs[input].isValid ) {
+      console.log(input)
+      areAllValid = false;
+    }
   }
 
   if ( !areAllValid ) {
@@ -103,7 +121,7 @@ const handleSubmit = () => {
   }
 }
 
-const recordViolation = async (lastName, studentId, violationType, guardOnDuty) => {
+const recordViolation = async (studentId, lastName, firstName, course, year) => {
   const notif = $q.notify({
     message: 'Recording...',
     color: 'accent',
@@ -114,7 +132,7 @@ const recordViolation = async (lastName, studentId, violationType, guardOnDuty) 
   }) 
 
   try {
-    await UserService.recordViolation(lastName, studentId, violationType, guardOnDuty)
+    await UserService.recordViolation(studentId, lastName, firstName, course, year);
 
     notif({
       message: 'Violation Recorded',

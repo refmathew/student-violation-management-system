@@ -314,28 +314,22 @@ const validationFn = () => {
 
 // =========================================================================== >
 
-/* Emit event about validity of data */
+/* Emit event to pass input data and validity of data */
 
-const validity = ref({
-  valid: false,
-  nonEmpty: false,
+const input = ref({
+  name: props.name,
+  value: false,
+  isValueValid: false,
 });
 
-watch(valErrMesActive, (newVal) => {
-  newVal ? (validity.value.valid = false) : (validity.value.valid = true);
-  const name = props.name;
-  emit("validateInput", { name, ...validity.value });
+watch(valErrMesActive, (newValErrMesActive) => {
+  newValErrMesActive ? (input.value.isValueValid = false) : (input.value.isValueValid = true);
 });
 
 onMounted(() => {
-  const name = props.name;
-
   $input.value.addEventListener("input", () => {
-    $input.value.value === "" || $input.value.value === undefined
-      ? (validity.value.nonEmpty = false)
-      : (validity.value.nonEmpty = true);
     if (props.type !== "select") validate();
-    emit("validateInput", { name, ...validity.value });
+    emitInput();
   });
 
   if (props.type === "select") {
@@ -345,39 +339,33 @@ onMounted(() => {
     );
 
     $input.value.addEventListener("blur", () => {
-      let hasNoMatch = true;
+      let hasMatch = false;
 
       setTimeout(() => {
-        hasNoMatch = true;
+        hasMatch = false;
 
         props.selectOptions.forEach((selectOption) => {
           if (
             selectOption.toLowerCase() ===
             $input.value.value.toLowerCase().trim()
           ) {
-            return (hasNoMatch = false);
+            return hasMatch = true;
           }
         });
 
-        $options.forEach(($option) => {
-          $option.addEventListener("click", () => {
-            hasNoMatch = true;
-            validity.value.nonEmpty = true;
-          });
-        });
+        !hasMatch
+          ? (input.value.isValueValid = false)
+          : (input.value.isValueValid = true);
 
-        hasNoMatch
-          ? (validity.value.valid = false)
-          : (validity.value.valid = true);
-        emit("validateInput", { name, ...validity.value });
+        emitInput();
       }, 200);
 
-      $options.forEach(($option) => {
-        $option.addEventListener("click", () => {
-          hasNoMatch = true;
-          validity.value.nonEmpty = true;
-        });
-      });
+      // $options.forEach(($option) => {
+        // $option.addEventListener("click", () => {
+          // hasMatch = true;
+          // emitInput();
+        // });
+      // });
     });
   }
 });
@@ -386,14 +374,19 @@ const validate = () => {
   if (props.validationCriteria) {
     const regex = new RegExp(props.validationCriteria);
     !regex.test($input.value.value.trim().toLowerCase())
-      ? (validity.value.valid = false)
-      : (validity.value.valid = true);
+      ? (input.value.isValueValid = false)
+      : (input.value.isValueValid = true);
   } else {
     !$input.value.value
-      ? (validity.value.valid = false)
-      : (validity.value.valid = true);
+      ? (input.value.isValueValid = false)
+      : (input.value.isValueValid = true);
   }
 };
+
+const emitInput = () => {
+  input.value.value = $input.value.value;
+  emit("validateInput", { ...input.value });
+}
 </script>
 
 <style lang="sass">

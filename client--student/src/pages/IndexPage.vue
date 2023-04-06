@@ -55,11 +55,24 @@ const $q = useQuasar();
 
 // =========================================================================== >
 
-const violationTypeOptions = [
-  "Unauthorized or illegal possession of controlled substances",
-  "Bringing and/or drinking liquor or alcoholic beverages",
-  "Carrying or possession of firearms, deadly weapons and explosives within the school premises",
-];
+const inputs = reactive({
+  studentId: {
+    inputValue: undefined,
+    isValid: false 
+  }, 
+  lastName: {
+    inputValue: undefined,
+    isValid: false 
+  }, 
+  violationType: {
+    inputValue: undefined,
+    isValid: false 
+  }, 
+  guardOnDuty: {
+    inputValue: undefined,
+    isValid: false 
+  }, 
+})
 
 const guardOnDutyOptions = [
   "Juan dela Cruz",
@@ -68,24 +81,27 @@ const guardOnDutyOptions = [
   "Manong Guard",
 ];
 
-const isValid = reactive({
-  lastName: false,
-  studentId: false,
-  violationType: false,
-  guardOnDuty: false,
-});
+const violationTypeOptions = [
+  "Unauthorized or illegal possession of controlled substances",
+  "Bringing and/or drinking liquor or alcoholic beverages",
+  "Carrying or possession of firearms, deadly weapons and explosives within the school premises",
+];
 
 // =========================================================================== >
 
 const checkValidity = (e) => {
-  e.valid && e.nonEmpty ? (isValid[e.name] = true) : (isValid[e.name] = false);
+  inputs[e.name].inputValue = e.value;
+  inputs[e.name].isValid = e.isValueValid;
 };
 
 const handleSubmit = () => {
   let areAllValid = true;
 
-  for (const item in isValid) {
-    if (isValid[item] === false) areAllValid = false;
+  for (const input in inputs) {
+    if ( !inputs[input].inputValue || !inputs[input].isValid ) {
+      console.log(input)
+      areAllValid = false;
+    }
   }
 
   if ( !areAllValid ) {
@@ -94,7 +110,7 @@ const handleSubmit = () => {
       color: 'warning',
       textColor: 'secondary',
       icon: 'warning',
-      badgeColor: 'accent',
+      badgeColor: 'warning',
       badgeTextColor: 'secondary'
     }) 
   } else {
@@ -138,7 +154,6 @@ const recordViolation = async (lastName, studentId, violationType, guardOnDuty) 
     })
   }
 }
-
 </script>
 
 <style scoped lang="sass">
