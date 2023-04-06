@@ -102,7 +102,6 @@ const handleSubmit = () => {
 
   for (const input in inputs) {
     if ( !inputs[input].inputValue || !inputs[input].isValid ) {
-      console.log(input)
       areAllValid = false;
     }
   }
@@ -138,7 +137,7 @@ const recordViolation = async (studentId, lastName, firstName, course, year) => 
       message: 'Violation Recorded',
       color: 'accent',
       textColor: 'secondary',
-      timeout: 2000,
+      timeout: 4000,
       spinner: false,
       icon: 'done',
     })
@@ -146,13 +145,13 @@ const recordViolation = async (studentId, lastName, firstName, course, year) => 
     notif({
       message: 'Error',
       caption: error.message,
-      color: 'accent',
+      color: 'warning',
       textColor: 'secondary',
       timeout: 12000,
       spinner: false,
-      icon: 'done',
+      icon: 'warning',
       actions: [ 
-        {label: 'Dismiss', color: 'primary', handler: () => {}}
+        {label: 'Dismiss', color: 'primary', textColor: 'secondary', handler: () => {}}
       ]
     })
   }
