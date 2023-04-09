@@ -422,6 +422,7 @@ const emitInput = () => {
 
   &__input
     color: $accent
+    flex: 1
 
   &__input::placeholder
     color: $primary-1
@@ -445,8 +446,6 @@ const emitInput = () => {
     fill: $primary-1
 
   &__dropdown
-    width: 100%
-    height: 100%
     transition: transform 200ms ease-out
     cursor: pointer
 
