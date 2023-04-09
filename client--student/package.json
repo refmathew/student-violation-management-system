@@ -2,7 +2,7 @@
   "name": "client--student",
   "version": "0.0.1",
   "description": "The students' frontend for the student violation record system of the SADDO.",
-  "productName": "Student Violation Record System",
+  "productName": "Student Violation Management System (Student)",
   "author": "Mathew Reforma <reformamathew@protonmail.com>",
   "private": true,
   "scripts": {
