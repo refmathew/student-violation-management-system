@@ -1,51 +1,21 @@
 <template>
-  <q-page> 
+  <q-page>
     <form class="form">
-      <CustomInput
-        name="studentId"
-        type="text"
-        placeholder="Student Id (Include dash. Ex: 18-00829)"
-        iconName="studentId"
-        validationCriteria="^\d\d-\d\d\d\d\d$"
-        validationErrorMessage="Please check input format"
-        @validate-input="checkValidity"
-      />
-      <CustomInput
-        name="lastName"
-        type="text"
-        placeholder="Last name"
-        iconName="student"
-        validationCriteria="^[a-zA-Z]+$"
-        @validate-input="checkValidity"
-      />
-      <CustomInput
-        name="firstName"
-        type="text"
-        placeholder="First name"
-        iconName="student"
-        validationCriteria="^[a-zA-Z]+$"
-        @validate-input="checkValidity"
-      />
-      <CustomInput
-        name="course"
-        type="select"
-        placeholder="Course"
-        iconName="course"
-        :selectOptions="courseOptions"
-        @validate-input="checkValidity"
-      />
-      <CustomInput
-        name="year"
-        type="select"
-        placeholder="Year"
-        iconName="year"
-        :selectOptions="yearOptions"
-        @validate-input="checkValidity"
-      />
+      <CustomInput name="studentId" type="text" placeholder="Student Id (Include dash. Ex: 18-00829)"
+        iconName="studentId" validationCriteria="^\d\d-\d\d\d\d\d$" validationErrorMessage="Please check input format"
+        @validate-input="checkValidity" />
+      <CustomInput name="lastName" type="text" placeholder="Last name" iconName="student"
+        validationCriteria="^[a-zA-Z]+$" @validate-input="checkValidity" />
+      <CustomInput name="firstName" type="text" placeholder="First name" iconName="student"
+        validationCriteria="^[a-zA-Z]+$" @validate-input="checkValidity" />
+      <CustomInput name="course" type="select" placeholder="Course" iconName="course" :selectOptions="courseOptions"
+        @validate-input="checkValidity" />
+      <CustomInput name="year" type="select" placeholder="Year" iconName="year" :selectOptions="yearOptions"
+        @validate-input="checkValidity" />
       <CustomButton @click="handleSubmit" text="Register" />
     </form>
   </q-page>
-  </template>
+</template>
 
 <script setup>
 import { ref, reactive } from 'vue';
@@ -68,24 +38,24 @@ const courseOptions = ref([
 const inputs = reactive({
   studentId: {
     inputValue: undefined,
-    isValid: false 
-  }, 
+    isValid: false
+  },
   lastName: {
     inputValue: undefined,
-    isValid: false 
-  }, 
+    isValid: false
+  },
   firstName: {
     inputValue: undefined,
-    isValid: false 
-  }, 
+    isValid: false
+  },
   course: {
     inputValue: undefined,
-    isValid: false 
-  }, 
+    isValid: false
+  },
   year: {
     inputValue: undefined,
-    isValid: false 
-  }, 
+    isValid: false
+  },
 })
 
 const yearOptions = ref(['1st', '2nd', '3rd', '4th']);
@@ -101,12 +71,12 @@ const handleSubmit = () => {
   let areAllValid = true;
 
   for (const input in inputs) {
-    if ( !inputs[input].inputValue || !inputs[input].isValid ) {
+    if (!inputs[input].inputValue || !inputs[input].isValid) {
       areAllValid = false;
     }
   }
 
-  if ( !areAllValid ) {
+  if (!areAllValid) {
     $q.notify({
       message: 'Please complete required fields',
       color: 'warning',
@@ -114,13 +84,19 @@ const handleSubmit = () => {
       icon: 'warning',
       badgeColor: 'warning',
       badgeTextColor: 'secondary'
-    }) 
+    })
   } else {
-    recordViolation();
+    registerStudent(
+      inputs.studentId.inputValue,
+      inputs.lastName.inputValue,
+      inputs.firstName.inputValue,
+      inputs.course.inputValue,
+      inputs.year.inputValue,
+    );
   }
 }
 
-const recordViolation = async (studentId, lastName, firstName, course, year) => {
+const registerStudent = async (studentId, lastName, firstName, course, year) => {
   const notif = $q.notify({
     message: 'Recording...',
     color: 'accent',
@@ -128,11 +104,10 @@ const recordViolation = async (studentId, lastName, firstName, course, year) => 
     group: false,
     timeout: 0,
     spinner: true,
-  }) 
+  })
 
   try {
-    await UserService.recordViolation(studentId, lastName, firstName, course, year);
-
+    const response = await UserService.registerStudent(studentId, lastName, firstName, course, year);
     notif({
       message: 'Violation Recorded',
       color: 'accent',
@@ -141,17 +116,17 @@ const recordViolation = async (studentId, lastName, firstName, course, year) => 
       spinner: false,
       icon: 'done',
     })
-  } catch(error) {
+  } catch (error) {
     notif({
       message: 'Error',
-      caption: error.message,
+      caption: error.response.data.message,
       color: 'warning',
       textColor: 'secondary',
       timeout: 12000,
       spinner: false,
       icon: 'warning',
-      actions: [ 
-        {label: 'Dismiss', color: 'primary', textColor: 'secondary', handler: () => {}}
+      actions: [
+        { label: 'Dismiss', color: 'primary', textColor: 'secondary', handler: () => { } }
       ]
     })
   }

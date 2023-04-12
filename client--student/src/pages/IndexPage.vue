@@ -1,39 +1,15 @@
 <template>
   <q-page class="page__main">
     <form class="page__form" ref="$form">
-      <CustomInput
-        name="lastName"
-        type="text"
-        placeholder="Last name"
-        iconName="student"
-        validationCriteria="^[a-zA-Z]+$"
-        @validate-input="checkValidity"
-      />
-      <CustomInput
-        name="studentId"
-        type="password"
-        placeholder="Student Id (Include dash. Ex: 18-00829)"
-        iconName="studentId"
-        validationCriteria="^\d\d-\d\d\d\d\d$"
-        validationErrorMessage="Please check input format"
-        @validate-input="checkValidity"
-      />
-      <CustomInput
-        name="violationType"
-        type="select"
-        placeholder="Violation Type"
-        iconName="violationType"
-        :selectOptions="violationTypeOptions"
-        @validate-input="checkValidity"
-      />
-      <CustomInput
-        name="guardOnDuty"
-        type="select"
-        placeholder="Guard on Duty"
-        iconName="guardOnDuty"
-        :selectOptions="guardOnDutyOptions"
-        @validate-input="checkValidity"
-      />
+      <CustomInput name="lastName" type="text" placeholder="Last name" iconName="student"
+        validationCriteria="^[a-zA-Z]+$" @validate-input="checkValidity" />
+      <CustomInput name="studentId" type="password" placeholder="Student Id (Include dash. Ex: 18-00829)"
+        iconName="studentId" validationCriteria="^\d\d-\d\d\d\d\d$" validationErrorMessage="Please check input format"
+        @validate-input="checkValidity" />
+      <CustomInput name="violationType" type="select" placeholder="Violation Type" iconName="violationType"
+        :selectOptions="violationTypeOptions" @validate-input="checkValidity" />
+      <CustomInput name="guardOnDuty" type="select" placeholder="Guard on Duty" iconName="guardOnDuty"
+        :selectOptions="guardOnDutyOptions" @validate-input="checkValidity" />
       <CustomButton @click="handleSubmit" text="Submit" class="page__form-button" />
     </form>
     <p class="page__footer">
@@ -58,20 +34,20 @@ const $q = useQuasar();
 const inputs = reactive({
   studentId: {
     inputValue: undefined,
-    isValid: false 
-  }, 
+    isValid: false
+  },
   lastName: {
     inputValue: undefined,
-    isValid: false 
-  }, 
+    isValid: false
+  },
   violationType: {
     inputValue: undefined,
-    isValid: false 
-  }, 
+    isValid: false
+  },
   guardOnDuty: {
     inputValue: undefined,
-    isValid: false 
-  }, 
+    isValid: false
+  },
 })
 
 const guardOnDutyOptions = [
@@ -98,12 +74,12 @@ const handleSubmit = () => {
   let areAllValid = true;
 
   for (const input in inputs) {
-    if ( !inputs[input].inputValue || !inputs[input].isValid ) {
+    if (!inputs[input].inputValue || !inputs[input].isValid) {
       areAllValid = false;
     }
   }
 
-  if ( !areAllValid ) {
+  if (!areAllValid) {
     $q.notify({
       message: 'Please complete required fields',
       color: 'warning',
@@ -111,9 +87,14 @@ const handleSubmit = () => {
       icon: 'warning',
       badgeColor: 'warning',
       badgeTextColor: 'secondary'
-    }) 
+    })
   } else {
-    recordViolation();
+    recordViolation(
+      inputs.lastName.inputValue,
+      inputs.studentId.inputValue,
+      inputs.violationType.inputValue,
+      inputs.guardOnDuty.inputValue
+    );
   }
 }
 
@@ -125,7 +106,7 @@ const recordViolation = async (lastName, studentId, violationType, guardOnDuty) 
     group: false,
     timeout: 0,
     spinner: true,
-  }) 
+  })
 
   try {
     await UserService.recordViolation(lastName, studentId, violationType, guardOnDuty)
@@ -138,7 +119,7 @@ const recordViolation = async (lastName, studentId, violationType, guardOnDuty) 
       spinner: false,
       icon: 'done',
     })
-  } catch(error) {
+  } catch (error) {
     notif({
       message: 'Error',
       caption: error.message,
@@ -147,8 +128,8 @@ const recordViolation = async (lastName, studentId, violationType, guardOnDuty) 
       timeout: 12000,
       spinner: false,
       icon: 'warning',
-      actions: [ 
-        {label: 'Dismiss', color: 'primary', textColor: 'secondary', handler: () => {}}
+      actions: [
+        { label: 'Dismiss', color: 'primary', textColor: 'secondary', handler: () => { } }
       ]
     })
   }
