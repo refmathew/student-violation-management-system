@@ -109,7 +109,7 @@ const registerStudent = async (studentId, lastName, firstName, course, year) => 
   try {
     const response = await UserService.registerStudent(studentId, lastName, firstName, course, year);
     notif({
-      message: 'Violation Recorded',
+      message: response.data.message,
       color: 'accent',
       textColor: 'secondary',
       timeout: 4000,

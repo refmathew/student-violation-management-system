@@ -3,7 +3,7 @@ import axios from 'axios';
 const url = process.env.DATA_SERVER
 
 class UserService {
-  static async recordViolation(studentId, lastName, violation, guard) {
+  static async recordViolation(lastName, studentId, violation, guard) {
     const reqBody = {
       studentId: studentId,
       lastName: lastName,

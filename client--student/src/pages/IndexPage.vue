@@ -109,10 +109,9 @@ const recordViolation = async (lastName, studentId, violationType, guardOnDuty) 
   })
 
   try {
-    await UserService.recordViolation(lastName, studentId, violationType, guardOnDuty)
-
+    const response = await UserService.recordViolation(lastName, studentId, violationType, guardOnDuty)
     notif({
-      message: 'Violation Recorded',
+      message: response.data.message,
       color: 'accent',
       textColor: 'secondary',
       timeout: 4000,
@@ -122,7 +121,7 @@ const recordViolation = async (lastName, studentId, violationType, guardOnDuty) 
   } catch (error) {
     notif({
       message: 'Error',
-      caption: error.message,
+      caption: error.response.data.message,
       color: 'warning',
       textColor: 'secondary',
       timeout: 12000,
