@@ -1,17 +1,9 @@
 const db = require('../db/connect');
-const sql = 'INSERT INTO Student( StudentId, LastName, FirstName, Course, Year ) VALUES(?, ?, ?, ?, ?)';
+let sql;
 
-const registerStudent = (req, res) => {
+const register = (req, res) => {
   const values = Object.values(req.body);
-  let hasEmptyValue = false;
-
-  values.forEach((value) => {
-    if (!value) hasEmptyValue = true;
-  })
-
-  if (hasEmptyValue) {
-    res.status(400).send({ success: false, message: "Please submit non empty fields" })
-  }
+  sql = 'INSERT INTO Students( StudentId, LastName, FirstName, Course, Year ) VALUES(?, ?, ?, ?, ?)';
 
   db.run(sql, values, (err, result) => {
     if (err) {
@@ -22,4 +14,19 @@ const registerStudent = (req, res) => {
   })
 }
 
-module.exports = { registerStudent }
+const recordViolation = async (req, res) => {
+  const { studentId, violation, guard } = req.body;
+  console.log(req.body)
+  sql = 'INSERT INTO Violations( StudentId, Violation, Guard ) VALUES(?, ?, ?)';
+
+  db.run(sql, [studentId, violation, guard], (err, rows) => {
+    if (err) {
+      res.status(400).send({ err: err })
+    } else {
+      res.status(200).send({ success: true, message: "Violation Recorded" })
+    }
+  });
+}
+
+
+module.exports = { register, recordViolation };

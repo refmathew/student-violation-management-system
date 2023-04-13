@@ -22,10 +22,8 @@ sql = `CREATE TABLE Violations(
 db.get("PRAGMA foreign_keys = ON")
 
 /* Run query */
-db.run(sql,
-  err => {
-    if (err) {
-      console.log(err)
-    }
+db.run(sql, (err) => {
+  if (err) {
+    console.log(err)
   }
-);
+});
