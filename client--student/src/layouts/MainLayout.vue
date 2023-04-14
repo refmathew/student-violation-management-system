@@ -38,7 +38,6 @@ const path = computed(() => {
 
 <style scoped lang="sass">
 .layout
-  background: $primary
   color: $secondary
 
 .page__wrapper
@@ -46,6 +45,7 @@ const path = computed(() => {
   min-height: 86.3rem !important
   width: 100%
   padding: 12.8rem
+  background: $primary
   text-align: center
 
 .page
