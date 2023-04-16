@@ -1,0 +1,12 @@
+// app global css in SCSS form
+
+@use "base";
+
+* { 
+  font-family: 'Poppins';
+}
+
+.q-drawer {
+  background-color: $primary-1;
+  color: $secondary-1;
+}
