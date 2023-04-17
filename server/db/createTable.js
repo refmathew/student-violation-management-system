@@ -9,7 +9,7 @@ sql = `CREATE TABLE Students(
   FirstName VARCHAR(30) NOT NULL, 
   Course VARCHAR(8) NOT NULL, 
   Year VARCHAR(4) NOT NULL,
-  RegistrationDate DATTIME DEFAULT CURRENT_TIMESTAMP NOT NULL
+  RegistrationDate DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 )`
 
 /* Create Violations table */

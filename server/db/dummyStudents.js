@@ -1,0 +1,400 @@
+const _ = require('lodash');
+const db = require('./connect');
+
+const firstNames = [
+  "Aiko",
+  "Aira",
+  "Alma",
+  "Amy",
+  "Ana",
+  "Andi",
+  "Anna",
+  "Barbie",
+  "Bella",
+  "Bianca",
+  "Blessica",
+  "Candy",
+  "Carla",
+  "Charito",
+  "Cherry",
+  "Cheska",
+  "Chynna",
+  "Claudia",
+  "Coleen",
+  "Daisy",
+  "Denise",
+  "Dianne",
+  "Dimples",
+  "Elena",
+  "Elise",
+  "Elizabeth",
+  "Emma",
+  "Empress",
+  "Eula",
+  "Eva",
+  "Francine",
+  "Gabby",
+  "Gina",
+  "Gladys",
+  "Gloria",
+  "Gretchen",
+  "Gwen",
+  "Harlene",
+  "Hazel",
+  "Heaven",
+  "Helga",
+  "Imelda",
+  "Ina",
+  "Isabel",
+  "Jackie",
+  "Jade",
+  "Janelle",
+  "Janine",
+  "Jennylyn",
+  "Joyce",
+  "Karen",
+  "Kim",
+  "Kristel",
+  "Kylie",
+  "Lani",
+  "Lexi",
+  "Lilia",
+  "Liza",
+  "Lovely",
+  "Maureen",
+  "Maybelyn",
+  "Melissa",
+  "Michelle",
+  "Mikee",
+  "Mona",
+  "Mutya",
+  "Nadine",
+  "Nicole",
+  "Nikki",
+  "Precious",
+  "Queenierich",
+  "Queen Elizabeth",
+  "Rebecca",
+  "Regine",
+  "Rita",
+  "Rosa",
+  "Ruby",
+  "Ruffa",
+  "Sharlene",
+  "Sharmaine",
+  "Sugar",
+  "Sunshine",
+  "Tessie",
+  "Tita",
+  "Venus",
+  "Wendy",
+  "Wynwyn",
+  "Zia",
+  "Abel",
+  "Abraham",
+  "Alex",
+  "Allan",
+  "Andoy",
+  "Andre",
+  "Anthony",
+  "Aring",
+  "Aristotle",
+  "Arjo",
+  "Arnell",
+  "Atoy",
+  "Bayani",
+  "Benjamin",
+  "Boy",
+  "Bryan",
+  "Buddy",
+  "Carlo",
+  "Christian",
+  "Cris",
+  "Daniel",
+  "Dante",
+  "Dave",
+  "Eddie",
+  "Eric",
+  "Francis",
+  "Freddie",
+  "Gabby",
+  "Gabriel",
+  "Gerald",
+  "Gil",
+  "Hendrix",
+  "Hermes",
+  "Hiro",
+  "Isko",
+  "Jake",
+  "Lance",
+  "Lito",
+  "Lloyd",
+  "Lou",
+  "Mario",
+  "Mark",
+  "Mike",
+  "Pancho",
+  "Paolo",
+  "Prince",
+  "Renz",
+  "Ronnie",
+  "Roy",
+  "Rudolph",
+  "Sonny",
+  "Teddy",
+  "Teejay",
+  "Tito",
+  "Tommy",
+  "Tony",
+  "Vandolph",
+  "Vin",
+  "Vic",
+  "Zanjoe"
+]
+
+const lastNames = [
+  "Abacan",
+  "Abad",
+  "Abadiano",
+  "Abagat",
+  "Abajenza",
+  "Aballa",
+  "Ábalos",
+  "Abando",
+  "Abanto",
+  "Abangad",
+  "Abangan",
+  "Abastar",
+  "Abastillas",
+  "Bacani",
+  "Bacod",
+  "Bacon",
+  "Bacolod",
+  "Badel",
+  "Badong",
+  "Baga",
+  "Bagatnan",
+  "Bagatsing",
+  "Bagayna",
+  "Bagcal",
+  "Bagon",
+  "Bagsic",
+  "Caasi",
+  "Cabaguio",
+  "Cabahit",
+  "Cabales",
+  "Caballero",
+  "Caballes",
+  "Cabanacan",
+  "Cabanalan",
+  "Cabanlit",
+  "Cabantac",
+  "Dabu",
+  "Dacanay",
+  "Dacua",
+  "Dacuyan",
+  "Dacuycuy",
+  "Dadis",
+  "Dagohoy",
+  "Dagondong",
+  "Dalangin",
+  "Ebon",
+  "Ebora",
+  "Ebrahim",
+  "Ebreo",
+  "Ebuenga",
+  "Echevarria",
+  "Echiverri",
+  "Edillo",
+  "Edralín",
+  "Ednaco",
+  "Facundo",
+  "Fajardo",
+  "Falamig",
+  "Falcón",
+  "Fallaria",
+  "Fallorina",
+  "Falsario",
+  "Fano",
+  "Fargas",
+  "Farillón",
+  "Gaffud",
+  "Gagarin",
+  "Gaite",
+  "Galang",
+  "Galarpe",
+  "Galdones",
+  "Gales",
+  "Gallardo",
+  "Gallares",
+  "Gallentes",
+  "Halayahay",
+  "Halili",
+  "Halimbawa",
+  "Harina",
+  "Hatague",
+  "Hatulan",
+  "Ibasitas",
+  "Ibo",
+  "Idea",
+  "Idica",
+  "Idor",
+  "Idos",
+  "Ignacio",
+  "Jacama",
+  "Jacob",
+  "Jacobe",
+  "Jadina",
+  "Jaen",
+  "Jaime",
+  "Jakosalem",
+  "Jamoralin",
+  "Kangleon",
+  "Karangalan",
+  "Katangkatang",
+  "Katigbak",
+  "Lacuña",
+  "Ladao",
+  "Ladica",
+  "Ladisla",
+  "Lagasca",
+  "Macabalitao",
+  "Macabulos",
+  "Macalalad",
+  "Macalinao",
+  "Macadaya",
+  "Macalangcom",
+  "Nacuray",
+  "Naduma",
+  "Nael",
+  "Nagar",
+  "Naguit",
+  "Naig",
+  "Ng",
+  "Rabang",
+  "Rabara",
+  "Racadio",
+  "Rafael",
+  "Rafales",
+  "Rafol",
+  "Ragasa",
+  "Rama",
+  "Saspa",
+  "Saturnino",
+  "Saudan",
+  "Saura",
+  "Saure",
+  "Sauro",
+  "Sausa",
+  "Taberna",
+  "Tabernilla",
+  "Tabiog",
+  "Tabilog",
+  "Tabinas",
+  "Tabing",
+  "Tabligan",
+  "Tabo",
+  "Tabornal",
+  "Ubalde",
+  "Ubaldo",
+  "Ucol",
+  "Udaundo",
+  "Ugalde",
+  "Ulaga",
+  "Venturina",
+  "Verajuela",
+  "Verances",
+  "Verceles",
+  "Verceluz",
+  "Ydorad",
+  "Yema",
+  "Yepes",
+  "Ygan",
+  "Zabate",
+  "Zacarias",
+  "Zafra",
+]
+
+const courses = [
+  "ABComm",
+  "BSA",
+  "BSBA",
+  "BSCS",
+  "BSMA",
+  "BSN",
+  "BSP",
+  "BSPh",
+  "BSSW",
+  "BEED",
+  "BSED",
+]
+
+const years = [
+  "1st",
+  "2nd",
+  "3rd",
+  "4th"
+]
+
+/* storage for studentIds that were already used */
+let studentIds = []
+
+let studentData = []
+
+let sql = 'INSERT INTO Students (StudentId, Lastname, Firstname, Course, Year, RegistrationDate) VALUES'
+
+const getRandomId = () => {
+  /* 20x0 */
+  let yearTenths;
+  /* 200x */
+  let yearOnes;
+
+  yearTenths = _.random(2);
+  yearTenths === 2
+    ? yearOnes = _.random(3)
+    : yearOnes = _.random(9);
+
+  const studentId = `${yearTenths}${yearOnes}-00${_.random(9)}${_.random(9)}${_.random(9)}`;
+
+  /* if the studentId already exists, call the fn again */
+  if (studentIds.includes(studentId)) {
+    return getRandomId();
+  }
+
+  studentIds.push(studentId);
+
+  return studentId
+}
+
+const getRandomData = () => {
+  let studentId = getRandomId();
+  let lastName = _.sample(lastNames);
+  let firstName = _.sample(firstNames);
+  let course = _.sample(courses);
+  let year = _.sample(years);
+
+  /* surround data with quotes for sql */
+  let randomData = [studentId, lastName, firstName, course, year];
+  randomData = randomData.map(data => `"${data}"`);
+
+  return randomData;
+}
+
+
+const amountOfData = 512;
+
+for (let i = 0; i < amountOfData; i++) {
+  let randomData = getRandomData();
+
+  if (i === 511) {
+    sql += `(${randomData.join(', ')})`
+  } else {
+    sql += `(${randomData.join(', ')}), `
+  }
+}
+
+db.run(sql, (err) => {
+  if (err) {
+    console.log(err)
+  }
+});
