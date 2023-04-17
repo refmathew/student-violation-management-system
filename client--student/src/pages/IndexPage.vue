@@ -6,7 +6,7 @@
       <CustomInput name="studentId" type="password" placeholder="Student Id (Include dash. Ex: 18-00829)"
         iconName="studentId" validationCriteria="^\d\d-\d\d\d\d\d$" validationErrorMessage="Please check input format"
         @validate-input="checkValidity" />
-      <CustomInput name="violationType" type="select" placeholder="Violation Type" iconName="violationType"
+      <CustomInput name="violationType" type="select" placeholder="Violation" iconName="violationType"
         :selectOptions="violationTypeOptions" @validate-input="checkValidity" />
       <CustomInput name="guardOnDuty" type="select" placeholder="Guard on Duty" iconName="guardOnDuty"
         :selectOptions="guardOnDutyOptions" @validate-input="checkValidity" />
@@ -51,16 +51,46 @@ const inputs = reactive({
 })
 
 const guardOnDutyOptions = [
-  "Juan dela Cruz",
-  "Ernesto Topacio",
-  "Tandang Sora",
-  "Manong Guard",
+  "N/A",
+  "Dario Fullion",
+  "Iyrome Argao",
+  "Jayson Verzo",
+  "Melvin Boston",
+  "Mercedita Abalona",
+  "Reejay Ortega",
+  "Remond Rivera",
+  "Ronaldo Villacruel"
 ];
 
 const violationTypeOptions = [
+  "Forgotten id",
+  "Wearing flat shoes",
+  "Wearing PE uniform",
+  "Wearing white socks",
+  "Colored undershirt",
+  "Wearing freestyle clothing",
+  "Colored hair",
+  "Not wearing sando",
   "Unauthorized or illegal possession of controlled substances",
   "Bringing and/or drinking liquor or alcoholic beverages",
   "Carrying or possession of firearms, deadly weapons and explosives within the school premises",
+  "Computer hacking",
+  "Engaging in any action, deliberately or resulting from gross negligence that might lead to serious injury or loss of life of the self or another person",
+  "Gross acts of disrespect, in words or in deeds, which tend to insult or subject to public ridicule or contempt any memeber of the administration, faculty, personnel, students, and security",
+  "Involvement in any form of attack to another person",
+  "Proselytizing against and/or maligning the Catholic Church, her teachings and practices",
+  "Cyber bullying",
+  "Posting indecent pictures or videos either of one self or of others through the social media",
+  "Posting of vulgar, profane, libelous, and cursing nwords in the social media agains the image of the school or any administrator, personnel or student",
+  "Creating a fake/troll account in the social media to impersonate an administrator or any student or personnel",
+  "Vandalism in any form and/or deliberate destruction of school property or any property belonging to any member of the administration, faculty, support staff or visitors",
+  "Engaging in activities that result i the damages of school properties",
+  "Stealing signages",
+  "Theft of school, personnel, visitors or fellow students' property or attempts to do such criminal acts",
+  "Deliberate disruption, obstruction, or interference of the normal functioning of classes, school offices, or any recognized school activities that tend to create disorder or disturbance",
+  "Membership in any unrecognized association/organizatin or fraternity/sorority/gang",
+  "Smoking within the school premises or approved off-campus activities or in public places while in school uniform, including e-cigarettes",
+  "Any forms of gambling within the school premises or outside in school uniform",
 ];
 
 // =========================================================================== >
