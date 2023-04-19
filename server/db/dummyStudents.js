@@ -341,7 +341,7 @@ let studentIds = []
 
 let studentData = []
 
-let sql = 'INSERT INTO Students (StudentId, Lastname, Firstname, Course, Year, RegistrationDate) VALUES'
+let sql = 'INSERT INTO Students (StudentId, Lastname, Firstname, Course, Year) VALUES'
 
 const getRandomId = () => {
   /* 20x0 */
