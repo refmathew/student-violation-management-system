@@ -4,14 +4,31 @@ let sql;
 const findStudent = (req, res, next) => {
   const { query } = req.query;
 
-  const sql = `SELECT * FROM Students WHERE LastName LIKE '%${query}%' OR FirstName LIKE '%${query}%' OR StudentId LIKE '%${query}%'`
+  const sql = `
+    SELECT 
+      * 
+    FROM 
+      Students 
+    WHERE 
+      LastName 
+    LIKE 
+      '%${query}%' 
+    OR 
+      FirstName 
+    LIKE 
+      '%${query}%' 
+    OR 
+      StudentId 
+    LIKE 
+      '%${query}%'
+  `
 
   db.all(sql, [], (err, rows) => {
     if (err) return res.status(500).send({ success: false, err: err })
 
     if (rows.length < 1) return res.status(400).send({ success: false, message: 'No student found matching the query' });
 
-    if (rows.length > 1) return res.status(200).send({ success: true, rows: rows })
+    if (rows.length > 1) return res.status(200).send({ success: true, data: rows, hasMultipleStudents: true })
 
     next()
   });
@@ -56,7 +73,7 @@ const getStudentData = async (req, res) => {
 
   db.all(sql, [], (err, row) => {
     if (err) return res.status(500).send({ success: false, err: err })
-    res.send({ success: true, data: row })
+    res.send({ success: true, data: row, hasMultipleStudents: false })
   });
 }
 
