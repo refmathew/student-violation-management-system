@@ -9,7 +9,8 @@ const getRecentViolations = (req, res) => {
 
     const newRows = rows.map((row) => {
       const { Timestamp: timestamp, StudentId: studentId, FirstName: firstName, LastName: lastName, Violation: violation, Course: course, Year: year, Guard: guard, } = row;
-      return { timestamp, studentId, firstName, lastName, violation, course, year, guard };
+      const name = `${firstName} ${lastName}`;
+      return { timestamp, studentId, name, violation, course, year, guard };
     })
 
     res.status(200).send({ success: true, data: newRows });
