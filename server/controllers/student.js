@@ -1,12 +1,24 @@
 const db = require('../db/connect');
 let sql;
 
+const checkQueryValidity = (req, res, next) => {
+  const { query } = req.query;
+
+  if (!query) return res.status(400).send({ success: false, message: "Please provide non empty query" });
+
+  next();
+}
+
 const findStudent = (req, res, next) => {
   const { query } = req.query;
 
   const sql = `
     SELECT 
-      * 
+      StudentId AS studentId,
+      LastName AS lastName,
+      FirstName AS firstName,
+      Course AS course,
+      Year AS year
     FROM 
       Students 
     WHERE 
@@ -21,9 +33,13 @@ const findStudent = (req, res, next) => {
       StudentId 
     LIKE 
       '%${query}%'
+    ORDER BY 
+      LastName
+    ASC
   `
 
   db.all(sql, [], (err, rows) => {
+    console.log(err, rows)
     if (err) return res.status(500).send({ success: false, err: err })
 
     if (rows.length < 1) return res.status(400).send({ success: false, message: 'No student found matching the query' });
@@ -104,4 +120,4 @@ const register = (req, res) => {
 }
 
 
-module.exports = { register, recordViolation, getStudentData, findStudent };
+module.exports = { checkQueryValidity, findStudent, getStudentData, register, recordViolation, };
