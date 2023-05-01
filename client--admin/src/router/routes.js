@@ -1,5 +1,5 @@
 import Index from 'pages/IndexPage.vue';
-import Search from 'pages/SearchPage.vue';
+import Find from 'pages/FindPage.vue';
 import Filter from 'pages/FilterPage.vue';
 import Violation from 'pages/stats/ViolationPage.vue';
 import Course from 'pages/stats/CoursePage.vue';
@@ -11,13 +11,13 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', Index },
-      { path: 'search', component: Search },
-      { path: 'filter', component: Filter },
-      { path: 'stats/violation', component: Violation },
-      { path: 'stats/time-and-date', component: Time },
-      { path: 'stats/course-and-year', component: Course },
-      { path: 'stats/guard', component: Guard }
+      { path: '', component: Index, meta: { title: 'Home' } },
+      { path: 'find', component: Find, meta: { title: 'Find student' } },
+      { path: 'filter', component: Filter, meta: { title: 'Filter violations' } },
+      { path: 'stats/violation', component: Violation, meta: { title: 'Violation' } },
+      { path: 'stats/time-and-date', component: Time, meta: { title: 'Time & Date' } },
+      { path: 'stats/course-and-year', component: Course, meta: { title: 'Course & Year' } },
+      { path: 'stats/guard', component: Guard, meta: { title: 'Guard' } }
     ]
   },
 

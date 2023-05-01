@@ -6,7 +6,24 @@
   font-family: 'Poppins';
 }
 
-.q-drawer {
-  background-color: $primary-1;
-  color: $secondary-1;
+.q-page {
+  min-height: unset !important;
+  padding: 0;
+}
+
+.q-table {
+  &__container {
+    background-color: $secondary-1;
+    padding-left: 3.2rem;
+    padding-right: 3.2rem;
+    padding: 1.6rem;
+  }
+
+  th {
+    font-size: 1.4rem;
+  }
+
+  &__middle {
+    color: $primary-2;
+  }
 }

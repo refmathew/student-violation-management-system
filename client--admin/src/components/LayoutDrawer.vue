@@ -15,6 +15,7 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script setup>
@@ -29,12 +30,12 @@ const drawerGenButtons = [
     link: '/'
   },
   {
-    title: 'Search student',
-    icon: 'search',
-    link: '/search'
+    title: 'Find student',
+    icon: 'find',
+    link: '/find'
   },
   {
-    title: 'Filter by',
+    title: 'Filter violations',
     icon: 'filter',
     link: '/filter'
   },
@@ -88,8 +89,6 @@ const isHovered = ref(false);
   justify-content: space-between;
   gap: 3.2rem;
   width: 9.6rem;
-  margin-left: 3.2rem;
-  margin-right: 3.2rem;
   padding: 3.2rem 0;
   overflow-x: hidden;
   box-shadow: 0 .4rem .8rem .2rem rgba($primary-1, .32);
@@ -98,7 +97,7 @@ const isHovered = ref(false);
   color: $secondary-1;
   transition: 400ms width ease;
 
-  &::-webkit-scrollbar { 
+  &::-webkit-scrollbar {
     display: none;
   }
 
