@@ -5,14 +5,17 @@
     <div class="layout--main__main">
       <div class="layout--main__header">
         <div class="layout--main__title">
-          <span class="layout--main__main-title">{{ route.meta.title }}</span>
+          <!-- Title -->
+          <span class="layout--main__main-title" v-if="route.meta.title">{{ route.meta.title }}</span>
+          <span class="layout--main__main-title" v-else>Statistics</span>
+          <!-- Subtitle -->
           <span class="layout--main__sub-title" v-if="route.meta.title === 'Home'">Welcome back, {{ userFirstName
           }}</span>
           <span class="layout--main__sub-title" v-else-if="route.meta.title === 'Find student'">Query student
             data</span>
           <span class="layout--main__sub-title" v-else-if="route.meta.title === 'Filter violations'">Specify violation
             queries</span>
-          <span class="layout--main__sub-title" v-else>Statistics</span>
+          <span class="layout--main__sub-title" v-else>{{ route.meta.subTitle }}</span>
         </div>
         <logout-button :first-name="userFirstName" :last-name="userLastName" icon="student" />
       </div>

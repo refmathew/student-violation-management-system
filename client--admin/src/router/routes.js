@@ -40,7 +40,7 @@ const routes = [
         name: 'statsViolationPage',
         component: Violation,
         meta: {
-          title: 'Violation'
+          subTitle: 'Violation'
         }
       },
       {
@@ -48,7 +48,7 @@ const routes = [
         name: 'statsTimeAndDatePage',
         component: Time,
         meta: {
-          title: 'Time & Date'
+          subTitle: 'Time & Date'
         }
       },
       {
@@ -56,7 +56,7 @@ const routes = [
         name: 'statsCourseAndYearPage',
         component: Course,
         meta: {
-          title: 'Course & Year'
+          subTitle: 'Course & Year'
         }
       },
       {
@@ -64,7 +64,7 @@ const routes = [
         name: 'statsGuardPage',
         component: Guard,
         meta: {
-          title: 'Guard'
+          subTitle: 'Guard'
         }
       }
     ]
