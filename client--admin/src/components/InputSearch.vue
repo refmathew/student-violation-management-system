@@ -2,7 +2,8 @@
   <div class="input--search__container" :class="{ 'input--search__container--active': inputActive }">
     <div class="input--search__icon" v-html="searchIconSvg" />
     <input class="input--search__input" :class="{ 'input--search__input--active': inputValue }" type="search"
-      :placeholder="placeholder" v-model="inputValue" @input="handleInput" @blur="handleBlur" @focus="handleFocus" />
+      ref="inputSearch" :placeholder="placeholder" v-model="inputValue" @input="handleInput" @blur="handleBlur"
+      @focus="handleFocus" />
   </div>
 </template>
 
@@ -44,6 +45,11 @@ export default {
   emits: [
     'cInput'
   ],
+  mounted() {
+    if (this.$route.name === 'findPage') {
+      this.$refs.inputSearch.focus()
+    }
+  }
 }
 </script>
 
