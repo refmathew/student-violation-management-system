@@ -39,7 +39,6 @@ const findStudent = (req, res, next) => {
   `
 
   db.all(sql, [], (err, rows) => {
-    console.log(err, rows)
     if (err) return res.status(500).send({ success: false, err: err })
 
     if (rows.length < 1) return res.status(400).send({ success: false, message: 'No student found matching the query' });

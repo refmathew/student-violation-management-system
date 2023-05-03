@@ -1,9 +1,31 @@
+const { format } = require('date-fns');
 const _ = require('lodash');
 const db = require('../db/connect.js');
 let sql;
 
 const getRecentViolations = (req, res) => {
-  sql = 'SELECT Violations.Timestamp, Violations.StudentId, Students.FirstName, Students.LastName, Violations.Violation, Violations.Timestamp, Students.Course, Students.Year, Violations.Guard FROM Violations INNER JOIN Students ON Violations.StudentId = Students.StudentId ORDER BY datetime(Timestamp) DESC LIMIT 50';
+  sql = `
+    SELECT 
+      Violations.Timestamp, 
+      Violations.StudentId, 
+      Students.FirstName, 
+      Students.LastName, 
+      Violations.Violation, 
+      Violations.Timestamp, 
+      Students.Course, 
+      Students.Year, 
+      Violations.Guard 
+    FROM 
+      Violations 
+    INNER JOIN 
+      Students 
+    ON 
+      Violations.StudentId = Students.StudentId 
+    ORDER BY 
+      datetime(Timestamp) 
+    DESC LIMIT 
+      50
+  `;
   db.all(sql, [], (err, rows) => {
     if (err) return console.error(err);
 
@@ -15,7 +37,101 @@ const getRecentViolations = (req, res) => {
 
     res.status(200).send({ success: true, data: newRows });
   })
-
 }
 
-module.exports = { getRecentViolations }
+const getViolationStatsWeek = (req, res, next) => {
+  const weekAgo = format(Date.now() - 7 * 24 * 60 * 60 * 1000, `yyyy-MM-dd`);
+
+  sql = `
+    SELECT 
+      COUNT(Violations.Violation) AS count, 
+      Violations.Violation AS violation,
+      ViolationsDesc.IsMajor AS violationIsMajor
+    FROM 
+      Violations 
+    INNER JOIN
+      ViolationsDesc
+    ON
+      Violations.Violation = ViolationsDesc.Violation
+    WHERE
+      Violations.Timestamp > date('${weekAgo}')
+    GROUP BY 
+      Violations.Violation
+    ORDER BY 
+      count 
+    DESC;
+  `
+
+  db.all(sql, [], (err, rows) => {
+    if (err) return console.error(err);
+    res.locals.week = rows
+    next()
+  })
+}
+
+const getViolationStatsMonth = (req, res, next) => {
+  const monthAgo = format(Date.now() - 30 * 24 * 60 * 60 * 1000, `yyyy-MM-dd`);
+
+  sql = `
+    SELECT 
+      COUNT(Violations.Violation) AS count, 
+      Violations.Violation AS violation,
+      ViolationsDesc.IsMajor AS violationIsMajor
+    FROM 
+      Violations 
+    INNER JOIN
+      ViolationsDesc
+    ON
+      Violations.Violation = ViolationsDesc.Violation
+    WHERE
+      Violations.Timestamp > date('${monthAgo}')
+    GROUP BY 
+      Violations.Violation
+    ORDER BY 
+      count 
+    DESC;
+  `
+
+  db.all(sql, [], (err, rows) => {
+    if (err) return console.error(err);
+    res.locals.month = rows;
+    next()
+  })
+}
+
+const getViolationStatsYear = (req, res, next) => {
+  const yearAgo = format(Date.now() - 365 * 24 * 60 * 60 * 1000, `yyyy-MM-dd`);
+
+  sql = `
+    SELECT 
+      COUNT(Violations.Violation) AS count, 
+      Violations.Violation AS violation,
+      ViolationsDesc.IsMajor AS violationIsMajor
+    FROM 
+      Violations 
+    INNER JOIN
+      ViolationsDesc
+    ON
+      Violations.Violation = ViolationsDesc.Violation
+    WHERE
+      Violations.Timestamp > date('${yearAgo}')
+    GROUP BY 
+      Violations.Violation
+    ORDER BY 
+      count 
+    DESC;
+  `
+
+  db.all(sql, [], (err, rows) => {
+    if (err) return console.error(err);
+
+    res.status(200).send({ success: true, data: { week: res.locals.week, month: res.locals.month, year: rows } });
+  })
+}
+
+module.exports = {
+  getRecentViolations,
+  getViolationStatsWeek,
+  getViolationStatsMonth,
+  getViolationStatsYear,
+};
