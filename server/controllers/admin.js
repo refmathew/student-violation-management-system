@@ -46,7 +46,8 @@ const getViolationStatsWeek = (req, res, next) => {
     SELECT 
       COUNT(Violations.Violation) AS count, 
       Violations.Violation AS violation,
-      ViolationsDesc.IsMajor AS violationIsMajor
+      ViolationsDesc.IsMajor AS violationIsMajor,
+      ViolationsDesc.Number AS violationNumber
     FROM 
       Violations 
     INNER JOIN
@@ -76,7 +77,8 @@ const getViolationStatsMonth = (req, res, next) => {
     SELECT 
       COUNT(Violations.Violation) AS count, 
       Violations.Violation AS violation,
-      ViolationsDesc.IsMajor AS violationIsMajor
+      ViolationsDesc.IsMajor AS violationIsMajor,
+      ViolationsDesc.Number AS violationNumber
     FROM 
       Violations 
     INNER JOIN
@@ -106,7 +108,8 @@ const getViolationStatsYear = (req, res, next) => {
     SELECT 
       COUNT(Violations.Violation) AS count, 
       Violations.Violation AS violation,
-      ViolationsDesc.IsMajor AS violationIsMajor
+      ViolationsDesc.IsMajor AS violationIsMajor,
+      ViolationsDesc.Number AS violationNumber
     FROM 
       Violations 
     INNER JOIN
