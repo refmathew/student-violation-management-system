@@ -5,6 +5,12 @@ export const useViolationStore = defineStore('violation', {
   state: () => {
     return {
       recent: [],
+      stats: {
+        violations: {},
+        courseYear: {},
+        time: {},
+        guard: {},
+      }
     }
   },
 
@@ -14,7 +20,10 @@ export const useViolationStore = defineStore('violation', {
 
   actions: {
     async requestRecent() {
-      this.recent = await ViolationService.getRecent()
+      this.recent = await ViolationService.getRecent();
+    },
+    async requestViolationStats() {
+      this.stats.violations = await ViolationService.getViolationStats();
     }
   }
 })

@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page>
     <div class="page--find">
       <form class="page--find__form" @submit.prevent="handleFormSubmit">
         <input-search class="page--find__search" placeholder="Find students..." @cInput="handleInputSearchInput" />

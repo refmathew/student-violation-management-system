@@ -22,6 +22,7 @@
       <q-page-container>
         <router-view />
       </q-page-container>
+      <setting-drawer />
     </div>
   </q-layout>
 </template>
@@ -30,6 +31,7 @@
 import { ref } from 'vue'
 import { useRoute } from 'vue-router';
 import LayoutDrawer from '../components/LayoutDrawer.vue'
+import SettingDrawer from 'src/components/globals/SettingDrawer.vue';
 import DrawerButton from 'src/components/DrawerButton.vue';
 import LogoutButton from 'src/components/LogoutButton.vue';
 

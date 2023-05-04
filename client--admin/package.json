@@ -16,6 +16,7 @@
     "@quasar/extras": "^1.0.0",
     "axios": "^0.21.1",
     "chart.js": "^4.2.1",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "date-fns": "^2.29.3",
     "dotenv": "^16.0.3",
     "lodash": "^4.17.21",
