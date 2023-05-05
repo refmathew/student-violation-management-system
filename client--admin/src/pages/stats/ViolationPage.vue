@@ -15,7 +15,6 @@ import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, Li
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useViolationStore } from 'src/stores/violation-store';
 import { useSettingStore } from 'src/stores/setting-store';
-import ScopeButton from '../../components/globals/ScopeButton.vue';
 
 ChartJS.register(Title, Tooltip, Legend, RadialLinearScale, ArcElement, ChartDataLabels);
 
