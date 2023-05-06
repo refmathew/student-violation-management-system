@@ -140,7 +140,6 @@ const getCourseAndYearStatsWeek = (req, res, next) => {
       Students.Course as studentCourse,
       Students.Year as studentYear,
       COUNT(Violations.Violation) AS violationCount, 
-      Violations.Violation AS violation,
       ViolationsDesc.IsMajor AS violationIsMajor
     FROM 
       Violations 
@@ -178,7 +177,6 @@ const getCourseAndYearStatsMonth = (req, res, next) => {
       Students.Course as studentCourse,
       Students.Year as studentYear,
       COUNT(Violations.Violation) AS violationCount, 
-      Violations.Violation AS violation,
       ViolationsDesc.IsMajor AS violationIsMajor
     FROM 
       Violations 
@@ -216,7 +214,6 @@ const getCourseAndYearStatsYear = (req, res, next) => {
       Students.Course as studentCourse,
       Students.Year as studentYear,
       COUNT(Violations.Violation) AS violationCount, 
-      Violations.Violation AS violation,
       ViolationsDesc.IsMajor AS violationIsMajor
     FROM 
       Violations 
