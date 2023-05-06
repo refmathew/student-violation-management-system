@@ -1,10 +1,10 @@
 <template>
-  <q-page class="page--stats-violation">
-    <div class="page--stats-violation__chart-title">
+  <q-page class="page--stats--violation">
+    <div class="page--stats--violation__chart-title">
       {{ `${this.getLevel === 1 ? 'MAJOR' : 'MINOR'} Violations this ${this.getScope.toUpperCase()}` }}
     </div>
-    <div class="page--stats-violation__chart-container">
-      <Pie class="page--stats-violation__chart" id="my-chart-id" :options="getChartOptions" :data="getChartData" />
+    <div class="page--stats--violation__chart-container">
+      <Pie class="page--stats--violation__chart" id="my-chart-id" :options="getChartOptions" :data="getChartData" />
     </div>
   </q-page>
 </template>
@@ -114,7 +114,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.page--stats-violation {
+.page--stats--violation {
   display: flex;
   flex-direction: column;
   align-items: center;

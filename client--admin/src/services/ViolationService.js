@@ -14,6 +14,12 @@ class ViolationService {
     const data = response.data.data;
     return data;
   }
+
+  static async getCourseYearStats() {
+    const response = await axios.get(`${url}/admin/violations/stats/course-and-year`);
+    const data = response.data.data;
+    return data;
+  }
 };
 
 export default ViolationService;
