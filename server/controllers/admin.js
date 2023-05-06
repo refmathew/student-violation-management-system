@@ -159,8 +159,8 @@ const getCourseAndYearStatsWeek = (req, res, next) => {
       Students.Year,
       ViolationsDesc.isMajor
     ORDER BY 
-      violationCount 
-    DESC;
+      studentCourse
+    ASC;
   `
 
   db.all(sql, [], (err, rows) => {
@@ -197,8 +197,8 @@ const getCourseAndYearStatsMonth = (req, res, next) => {
       Students.Year,
       ViolationsDesc.isMajor
     ORDER BY 
-      violationCount 
-    DESC;
+      studentCourse
+    ASC;
   `
 
   db.all(sql, [], (err, rows) => {
@@ -235,8 +235,8 @@ const getCourseAndYearStatsYear = (req, res, next) => {
       Students.Year,
       ViolationsDesc.isMajor
     ORDER BY 
-      violationCount 
-    DESC;
+      studentCourse
+    ASC;
   `
 
   db.all(sql, [], (err, rows) => {
