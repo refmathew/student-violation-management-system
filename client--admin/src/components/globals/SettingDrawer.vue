@@ -16,11 +16,6 @@ import ScopeButton from './ScopeButton.vue';
 import LevelButton from './LevelButton.vue';
 
 export default {
-  props: {
-    buttons: {
-      required: true
-    }
-  },
   data() {
     return {
       settingDrawerHeight: undefined,
