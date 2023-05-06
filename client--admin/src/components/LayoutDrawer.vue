@@ -48,14 +48,14 @@ const drawerStatButtons = [
     link: '/stats/violation'
   },
   {
-    title: 'Time & Date',
-    icon: 'timeAndDate',
-    link: '/stats/time-and-date'
-  },
-  {
     title: 'Course & Year',
     icon: 'courseAndYear',
     link: '/stats/course-and-year'
+  },
+  {
+    title: 'Time & Date',
+    icon: 'timeAndDate',
+    link: '/stats/time-and-date'
   },
   {
     title: 'Guard',
