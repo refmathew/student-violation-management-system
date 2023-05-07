@@ -108,6 +108,18 @@ export const useViolationStore = defineStore('violation', {
       return state.stats.time[state.settingStore.scope]
         .map(item => item.violationCount);
     },
+    getGuardStats: (state) => {
+      if (!state.stats.guard.year) return null;
+
+      return state.stats.guard[state.settingStore.scope]
+        .map(violation => violation.violationCount)
+    },
+    getGuardStatLabels: (state) => {
+      if (!state.stats.guard.year) return null;
+
+      return state.stats.guard[state.settingStore.scope]
+        .map(violation => violation.violationGuard)
+    }
   },
 
   actions: {
@@ -122,6 +134,9 @@ export const useViolationStore = defineStore('violation', {
     },
     async requestTimeStats() {
       this.stats.time = await ViolationService.getTimeStats();
-    }
+    },
+    async requestGuardStats() {
+      this.stats.guard = await ViolationService.getGuardStats();
+    },
   }
 })

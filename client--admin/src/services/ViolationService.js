@@ -26,6 +26,12 @@ class ViolationService {
     const data = response.data.data;
     return data;
   }
+
+  static async getGuardStats() {
+    const response = await axios.get(`${url}/admin/violations/stats/guard`);
+    const data = response.data.data;
+    return data;
+  }
 };
 
 export default ViolationService;
