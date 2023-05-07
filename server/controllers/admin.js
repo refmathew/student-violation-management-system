@@ -33,6 +33,36 @@ const getTimeStatsQuery = (range) => {
   `
 }
 
+const getGuardStatsQuery = (range) => {
+  let timeAgo;
+  switch (range) {
+    case 'week':
+      timeAgo = '-007 days';
+      break;
+    case 'month':
+      timeAgo = '-030 days';
+      break;
+    case 'year':
+      timeAgo = '-001 years';
+      break;
+  }
+
+  return `
+    SELECT
+      COUNT(Violations.Violation) AS violationCount,
+      Guard AS violationGuard
+    FROM 
+      Violations
+    WHERE 
+      Violations.Timestamp > date("now", "${timeAgo}")
+	 GROUP BY 
+      violationGuard
+    ORDER BY
+      violationGuard
+    ASC;
+`
+}
+
 const getRecentViolations = (req, res) => {
   sql = `
     SELECT 
@@ -295,10 +325,42 @@ const getTimeStatsYear = (req, res, next) => {
   })
 }
 
+const getGuardStatsWeek = (req, res, next) => {
+  db.all(getGuardStatsQuery('week'), [], (err, rows) => {
+    if (err) return res.status(500).send({ success: false, message: err })
+    res.locals.week = rows
+    next()
+  })
+}
+
+const getGuardStatsMonth = (req, res, next) => {
+  db.all(getGuardStatsQuery('month'), [], (err, rows) => {
+    if (err) return res.status(500).send({ success: false, message: err })
+    res.locals.month = rows
+    next()
+  })
+}
+const getGuardStatsYear = (req, res, next) => {
+  db.all(getGuardStatsQuery('year'), [], (err, rows) => {
+    if (err) return res.status(500).send({ success: false, message: err })
+    res.status(200).send({
+      success: true,
+      data: {
+        week: res.locals.week,
+        month: res.locals.month,
+        year: rows
+      }
+    })
+  })
+}
+
 module.exports = {
   getCourseAndYearStatsWeek,
   getCourseAndYearStatsMonth,
   getCourseAndYearStatsYear,
+  getGuardStatsWeek,
+  getGuardStatsMonth,
+  getGuardStatsYear,
   getRecentViolations,
   getTimeStatsWeek,
   getTimeStatsMonth,

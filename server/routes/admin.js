@@ -4,6 +4,9 @@ const {
   getCourseAndYearStatsWeek,
   getCourseAndYearStatsMonth,
   getCourseAndYearStatsYear,
+  getGuardStatsWeek,
+  getGuardStatsMonth,
+  getGuardStatsYear,
   getRecentViolations,
   getTimeStatsWeek,
   getTimeStatsMonth,
@@ -25,5 +28,7 @@ router.route('/violations/stats/time')
 router.route('/violations/stats/violations')
   .get(getViolationStatsWeek, getViolationStatsMonth, getViolationStatsYear);
 
+router.route('/violations/stats/guard')
+  .get(getGuardStatsWeek, getGuardStatsMonth, getGuardStatsYear);
 
 module.exports = router;
