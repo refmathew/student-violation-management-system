@@ -1,7 +1,7 @@
 <template>
   <q-page class="page--stats--course-year">
     <div class="page--stats--course-year__chart-title">
-      {{ `Violations this ${this.getScope.toUpperCase()}` }}
+      {{ `Violations by Course this ${this.getScope.toUpperCase()}` }}
     </div>
     <div class="page--stats--course-year__chart-container">
       <Bar class="page--stats--course-year__chart" id="my-chart-id" :options="getChartOptions" :data="getChartData" />
