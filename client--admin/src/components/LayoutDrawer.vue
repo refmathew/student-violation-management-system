@@ -53,7 +53,7 @@ const drawerStatButtons = [
     link: '/stats/course-and-year'
   },
   {
-    title: 'Time & Date',
+    title: 'Time of the Day',
     icon: 'timeAndDate',
     link: '/stats/time-and-date'
   },

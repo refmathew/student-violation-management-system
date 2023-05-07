@@ -48,7 +48,7 @@ const routes = [
         name: 'statsTimeAndDatePage',
         component: Time,
         meta: {
-          subTitle: 'Time & Date'
+          subTitle: 'Time of the Day'
         }
       },
       {
