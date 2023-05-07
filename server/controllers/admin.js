@@ -3,6 +3,36 @@ const _ = require('lodash');
 const db = require('../db/connect.js');
 let sql;
 
+const getTimeStatsQuery = (range) => {
+  let timeAgo;
+  switch (range) {
+    case 'week':
+      timeAgo = '-007 days';
+      break;
+    case 'month':
+      timeAgo = '-030 days';
+      break;
+    case 'year':
+      timeAgo = '-001 years';
+      break;
+  }
+
+  return `
+    SELECT
+      strftime('%H', Violations.Timestamp) AS violationTime,
+      COUNT(Violations.Violation) AS violationCount
+    FROM
+      Violations
+    WHERE
+      Violations.Timestamp > date("now", "${timeAgo}")
+    GROUP BY
+      violationTime
+    ORDER BY
+      violationTime
+    ASC;
+  `
+}
+
 const getRecentViolations = (req, res) => {
   sql = `
     SELECT 
@@ -242,11 +272,37 @@ const getCourseAndYearStatsYear = (req, res, next) => {
   })
 }
 
+const getTimeStatsWeek = (req, res, next) => {
+  db.all(getTimeStatsQuery('week'), [], (err, rows) => {
+    if (err) return console.error(err);
+    res.locals.week = rows
+    next()
+  })
+}
+
+const getTimeStatsMonth = (req, res, next) => {
+  db.all(getTimeStatsQuery('month'), [], (err, rows) => {
+    if (err) return console.error(err);
+    res.locals.month = rows
+    next()
+  })
+}
+
+const getTimeStatsYear = (req, res, next) => {
+  db.all(getTimeStatsQuery('year'), [], (err, rows) => {
+    if (err) return console.error(err);
+    res.status(200).send({ success: true, data: { week: res.locals.week, month: res.locals.month, year: rows } });
+  })
+}
+
 module.exports = {
   getCourseAndYearStatsWeek,
   getCourseAndYearStatsMonth,
   getCourseAndYearStatsYear,
   getRecentViolations,
+  getTimeStatsWeek,
+  getTimeStatsMonth,
+  getTimeStatsYear,
   getViolationStatsWeek,
   getViolationStatsMonth,
   getViolationStatsYear,

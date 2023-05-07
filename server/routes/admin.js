@@ -5,6 +5,9 @@ const {
   getCourseAndYearStatsMonth,
   getCourseAndYearStatsYear,
   getRecentViolations,
+  getTimeStatsWeek,
+  getTimeStatsMonth,
+  getTimeStatsYear,
   getViolationStatsWeek,
   getViolationStatsMonth,
   getViolationStatsYear
@@ -13,10 +16,14 @@ const {
 router.route('/violations/recent')
   .get(getRecentViolations);
 
+router.route('/violations/stats/course-and-year')
+  .get(getCourseAndYearStatsWeek, getCourseAndYearStatsMonth, getCourseAndYearStatsYear);
+
+router.route('/violations/stats/time')
+  .get(getTimeStatsWeek, getTimeStatsMonth, getTimeStatsYear)
+
 router.route('/violations/stats/violations')
   .get(getViolationStatsWeek, getViolationStatsMonth, getViolationStatsYear);
 
-router.route('/violations/stats/course-and-year')
-  .get(getCourseAndYearStatsWeek, getCourseAndYearStatsMonth, getCourseAndYearStatsYear);
 
 module.exports = router;
