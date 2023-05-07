@@ -20,6 +20,12 @@ class ViolationService {
     const data = response.data.data;
     return data;
   }
+
+  static async getTimeStats() {
+    const response = await axios.get(`${url}/admin/violations/stats/time`);
+    const data = response.data.data;
+    return data;
+  }
 };
 
 export default ViolationService;

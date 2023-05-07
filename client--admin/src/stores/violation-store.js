@@ -90,6 +90,24 @@ export const useViolationStore = defineStore('violation', {
 
       return values;
     },
+    getTimeStats: (state) => {
+      if (!state.stats.time.year) return undefined;
+
+      // let data = {};
+
+      // state.stats.time.week // Year, since it encapsulates week and month
+      // .forEach(violation => {
+      // if (violation.violationTime > 12) {
+      // data[`${violation.violationTime - 12} pm`] = violation.violationCount
+      // } else {
+      // data[`${violation.violationTime} am`] = violation.violationCount
+      // }
+      // });
+      // return data
+
+      return state.stats.time[state.settingStore.scope]
+        .map(item => item.violationCount);
+    },
   },
 
   actions: {
@@ -101,6 +119,9 @@ export const useViolationStore = defineStore('violation', {
     },
     async requestCourseYearStats() {
       this.stats.courseYear = await ViolationService.getCourseYearStats();
+    },
+    async requestTimeStats() {
+      this.stats.time = await ViolationService.getTimeStats();
     }
   }
 })
