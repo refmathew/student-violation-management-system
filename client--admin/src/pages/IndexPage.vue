@@ -13,7 +13,6 @@
 import { ref } from 'vue';
 import { format } from 'date-fns';
 import { useViolationStore } from 'src/stores/violation-store';
-import { useStudentStore } from 'src/stores/student-store';
 import InputSearch from 'src/components/InputSearch.vue';
 import { useRouter } from 'vue-router';
 const router = useRouter();
@@ -89,14 +88,6 @@ const columns = [
     headerStyle: 'font-weight: 600'
   },
 ]
-
-
-const searchInputValue = ref('');
-const handleInputSearchInput = (e) => {
-  searchInputValue.value = e;
-  studentStore.modifyQueriedStudent(searchInputValue.value);
-}
-
 
 const handleInputSearchClick = () => {
   router.push('/find')
