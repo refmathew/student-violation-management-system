@@ -31,6 +31,18 @@ sql = `CREATE TABLE Violations(
 )`
 // db.get("PRAGMA foreign_keys = ON")
 
+/* Create User table */
+sql = `
+  CREATE TABLE User(
+    id INTEGER PRIMARY KEY NOT NULL,
+    username VARCHAR NOT NULL,
+    password VARCHAR NOT NULL,
+    lastname TEXT NOT NULL,
+    firstname TEXT NOT NULL,
+    isAdmin BOOLEAN NOT NULL CHECK (isAdmin IN (0, 1))
+  )
+`
+
 /* Run query */
 db.run(sql, (err) => {
   if (err) {
