@@ -66,6 +66,7 @@ export default {
         labels: this.violationStore.getGuardStatLabels,
         datasets: [
           {
+            label: `Violations by Guard this ${this.getScope}`,
             borderWidth: 2,
             borderJoinStyle: 'round',
             backgroundColor: '#6A79FF29',
