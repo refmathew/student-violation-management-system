@@ -17,7 +17,8 @@
             queries</span>
           <span class="layout--main__sub-title" v-else>{{ route.meta.subTitle }}</span>
         </div>
-        <logout-button :first-name="userFirstName" :last-name="userLastName" icon="student" />
+        <logout-button v-if="userStore.user.firstname" :first-name="useUserStore.user.firstname"
+          :last-name="userLastName" icon="student" />
       </div>
       <q-page-container>
         <router-view />
@@ -29,16 +30,18 @@
 
 <script setup>
 import { ref } from 'vue'
+import { Cookies } from 'quasar';
 import { useRoute } from 'vue-router';
+import { useUserStore } from 'src/stores/user-store';
 import LayoutDrawer from '../components/LayoutDrawer.vue'
 import SettingDrawer from 'src/components/globals/SettingDrawer.vue';
-import DrawerButton from 'src/components/DrawerButton.vue';
 import LogoutButton from 'src/components/LogoutButton.vue';
 
 const userLastName = ref('dela Cruz');
 const userFirstName = ref('John');
 
 const route = useRoute();
+const userStore = useUserStore();
 
 const drawerActive = ref(false);
 const handleHoverDrawer = (e) => {

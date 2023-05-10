@@ -5,6 +5,7 @@ import Violation from 'pages/stats/ViolationPage.vue';
 import Course from 'pages/stats/CoursePage.vue';
 import Time from 'pages/stats/TimePage.vue';
 import Guard from 'pages/stats/GuardPage.vue';
+import Login from 'src/pages/LoginPage.vue';
 
 const routes = [
   {
@@ -68,6 +69,14 @@ const routes = [
         }
       }
     ]
+  },
+  {
+    path: '/login',
+    name: 'loginPage',
+    component: Login,
+    meta: {
+      title: 'Login'
+    }
   },
 
   // Always leave this as last one,

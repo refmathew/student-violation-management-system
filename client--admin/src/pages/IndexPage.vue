@@ -10,12 +10,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import { format } from 'date-fns';
 import { useViolationStore } from 'src/stores/violation-store';
 import InputSearch from 'src/components/InputSearch.vue';
 import { useRouter } from 'vue-router';
+import { Cookies } from 'quasar';
 const router = useRouter();
+if (!Cookies.get('isLoggedIn')) router.push('/login')
 
 const violationStore = useViolationStore();
 violationStore.requestRecent();
