@@ -14,9 +14,10 @@ import { format } from 'date-fns';
 import { useViolationStore } from 'src/stores/violation-store';
 import InputSearch from 'src/components/InputSearch.vue';
 import { useRouter } from 'vue-router';
-import { Cookies } from 'quasar';
+import { useUserStore } from 'src/stores/user-store';
 const router = useRouter();
-if (!Cookies.get('isLoggedIn')) router.push('/login')
+const userStore = useUserStore();
+if (Object.keys(userStore.user).length === 0) router.push('/login')
 
 const violationStore = useViolationStore();
 violationStore.requestRecent();

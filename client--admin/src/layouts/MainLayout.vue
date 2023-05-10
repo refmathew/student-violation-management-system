@@ -30,7 +30,6 @@
 
 <script setup>
 import { ref } from 'vue'
-import { Cookies } from 'quasar';
 import { useRoute } from 'vue-router';
 import { useUserStore } from 'src/stores/user-store';
 import LayoutDrawer from '../components/LayoutDrawer.vue'

@@ -16,7 +16,7 @@
 <script>
 import UserService from '../services/UserService';
 import { useUserStore } from '../stores/user-store.js';
-import { Cookies, useQuasar } from 'quasar';
+import { useQuasar } from 'quasar';
 
 export default {
   data() {
@@ -53,15 +53,12 @@ export default {
         })
       }
 
-      console.log(Cookies.getAll())
-
       this.userStore.$patch({ user: response.data })
 
       this.$router.push('/')
     }
   },
   setup() {
-    Cookies.set('isLoggedIn', true)
   }
 }
 </script>
