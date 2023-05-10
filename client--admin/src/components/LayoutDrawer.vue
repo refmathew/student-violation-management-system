@@ -11,7 +11,7 @@
           :icon="button.icon" :link="button.link" :showTitle="isHovered" />
       </div>
       <div>
-        <drawer-button title="Sign out" icon="signout" link="/logout" :showTitle="isHovered" />
+        <drawer-button title="Sign out" icon="signout" link="/login" :showTitle="isHovered" />
       </div>
     </div>
   </div>
@@ -34,11 +34,11 @@ const drawerGenButtons = [
     icon: 'find',
     link: '/find'
   },
-  {
-    title: 'Filter violations',
-    icon: 'filter',
-    link: '/filter'
-  },
+  // {
+  // title: 'Filter violations',
+  // icon: 'filter',
+  // link: '/filter'
+  // },
 ]
 
 const drawerStatButtons = [
