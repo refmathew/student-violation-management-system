@@ -37,7 +37,7 @@ import LogoutButton from 'src/components/LogoutButton.vue';
 
 const router = useRouter();
 const userStore = useUserStore();
-if (Object.keys(userStore.user).length === 0) router.push('/login')
+// if (Object.keys(userStore.user).length === 0) router.push('/login')
 
 const userLastName = ref('dela Cruz');
 const userFirstName = ref('John');

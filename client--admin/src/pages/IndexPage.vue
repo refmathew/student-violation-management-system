@@ -17,7 +17,7 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from 'src/stores/user-store';
 const router = useRouter();
 const userStore = useUserStore();
-if (Object.keys(userStore.user).length === 0) router.push('/login')
+// if (Object.keys(userStore.user).length === 0) router.push('/login')
 
 const violationStore = useViolationStore();
 violationStore.requestRecent();
