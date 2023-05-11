@@ -23,6 +23,7 @@
         <router-view />
       </q-page-container>
       <setting-drawer />
+      <download-button />
     </div>
   </q-layout>
 </template>
@@ -34,6 +35,7 @@ import { useUserStore } from 'src/stores/user-store';
 import LayoutDrawer from '../components/LayoutDrawer.vue'
 import SettingDrawer from 'src/components/globals/SettingDrawer.vue';
 import LogoutButton from 'src/components/LogoutButton.vue';
+import DownloadButton from 'src/components/layouts/stats/DownloadButton.vue';
 
 const router = useRouter();
 const userStore = useUserStore();

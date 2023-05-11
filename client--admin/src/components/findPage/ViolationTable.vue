@@ -1,20 +1,15 @@
 <template>
   <div class="violation-table__container">
     <div class="violation-table__title">{{ title }}</div>
-    <q-table class="violation-table__table" :rows="showMajor ? violationsMajor : violationsMinor" row-key="violationTD"
-      virtual-scroll wrap-cells :columns="columns" :rows-per-page-options="[0]" style="max-height: 48rem;" flat bordered
-      hide-bottom no-results-label="No data to show" />
-    <div class="violation-table__buttons-container">
-      <button class="violation-table__button" :class="{ 'violation-table__button--active': !showMajor }"
-        @click="showMajor = false" v-ripple>Minor</button>
-      <button class="violation-table__button" :class="{ 'violation-table__button--active': showMajor }"
-        @click="showMajor = true" v-ripple>Major</button>
-    </div>
+    <q-table class="violation-table__table" :rows="getLevel === 1 ? violationsMajor : violationsMinor"
+      row-key="violationTD" virtual-scroll wrap-cells :columns="columns" :rows-per-page-options="[0]"
+      style="max-height: 48rem;" flat bordered hide-bottom no-results-label="No data to show" />
   </div>
 </template>
 
 <script>
 import { format } from 'date-fns';
+import { useSettingStore } from 'src/stores/setting-store';
 
 export default {
   props: {
@@ -30,6 +25,7 @@ export default {
   data() {
     return {
       showMajor: false,
+      settingStore: useSettingStore(),
       columns: [
         {
           name: 'timestamp',
@@ -68,6 +64,9 @@ export default {
     },
     violationsMinor() {
       return this.violations.filter(violation => violation.violationIsMajor === 0)
+    },
+    getLevel() {
+      return this.settingStore.displayMajor;
     }
   },
   setup() { }
