@@ -13,8 +13,16 @@ const {
   getTimeStatsYear,
   getViolationStatsWeek,
   getViolationStatsMonth,
-  getViolationStatsYear
+  getViolationStatsYear,
+  registerGuard,
+  registerViolation,
 } = require('../controllers/admin.js');
+
+router.route('/register-guard')
+  .post(registerGuard);
+
+router.route('/register-violation')
+  .post(registerViolation);
 
 router.route('/violations/recent')
   .get(getRecentViolations);

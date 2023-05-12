@@ -43,6 +43,14 @@ sql = `
   )
 `
 
+sql = `
+  CREATE TABLE Guard(
+    id INTEGER PRIMARY KEY NOT NULL,
+    firstname VARCHAR NOT NULL,
+    lastname VARCHAR NOT NULL
+  )
+`
+
 /* Run query */
 db.run(sql, (err) => {
   if (err) {

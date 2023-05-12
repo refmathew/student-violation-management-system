@@ -340,6 +340,7 @@ const getGuardStatsMonth = (req, res, next) => {
     next()
   })
 }
+
 const getGuardStatsYear = (req, res, next) => {
   db.all(getGuardStatsQuery('year'), [], (err, rows) => {
     if (err) return res.status(500).send({ success: false, message: err })
@@ -351,6 +352,41 @@ const getGuardStatsYear = (req, res, next) => {
         year: rows
       }
     })
+  })
+}
+
+const registerViolation = (req, res, next) => {
+  const values = Object.values(req.body);
+  sql = `
+    INSERT INTO 
+      ViolationsDesc(Violation, Number, IsMajor) 
+    VALUES
+      (?, ?, ?);
+  `
+
+  db.run(sql, values, (err, result) => {
+    if (err) {
+      if (err.errno === 19) res.status(400).send({ success: false, message: "Violation already exists" })
+    } else {
+      res.status(200).send({ success: true, message: "Violation successfully registered" })
+    }
+  })
+}
+const registerGuard = (req, res, next) => {
+  const values = Object.values(req.body);
+  sql = `
+    INSERT INTO 
+      Guard(firstname, lastname) 
+    VALUES
+      (?, ?);
+  `
+
+  db.run(sql, values, (err, result) => {
+    if (err) {
+      if (err.errno === 19) res.status(400).send({ success: false, message: "Guard already exists" })
+    } else {
+      res.status(200).send({ success: true, message: "Guard successfully registered" })
+    }
   })
 }
 
@@ -368,4 +404,6 @@ module.exports = {
   getViolationStatsWeek,
   getViolationStatsMonth,
   getViolationStatsYear,
+  registerGuard,
+  registerViolation
 };
