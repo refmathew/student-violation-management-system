@@ -2,66 +2,15 @@ const { format } = require('date-fns');
 const _ = require('lodash');
 const db = require('../db/connect.js');
 let sql;
-
-const getTimeStatsQuery = (range) => {
-  let timeAgo;
-  switch (range) {
-    case 'week':
-      timeAgo = '-007 days';
-      break;
-    case 'month':
-      timeAgo = '-030 days';
-      break;
-    case 'year':
-      timeAgo = '-001 years';
-      break;
-  }
-
-  return `
-    SELECT
-      strftime('%H', Violations.Timestamp) AS violationTime,
-      COUNT(Violations.Violation) AS violationCount
-    FROM
-      Violations
-    WHERE
-      Violations.Timestamp > date("now", "${timeAgo}")
-    GROUP BY
-      violationTime
-    ORDER BY
-      violationTime
-    ASC;
-  `
-}
-
-const getGuardStatsQuery = (range) => {
-  let timeAgo;
-  switch (range) {
-    case 'week':
-      timeAgo = '-007 days';
-      break;
-    case 'month':
-      timeAgo = '-030 days';
-      break;
-    case 'year':
-      timeAgo = '-001 years';
-      break;
-  }
-
-  return `
-    SELECT
-      COUNT(Violations.Violation) AS violationCount,
-      Guard AS violationGuard
-    FROM 
-      Violations
-    WHERE 
-      Violations.Timestamp > date("now", "${timeAgo}")
-	 GROUP BY 
-      violationGuard
-    ORDER BY
-      violationGuard
-    ASC;
-`
-}
+// SELECT 
+// Timestamp
+// FROM 
+// Violations
+// WHERE
+// Timestamp >= date("now", "start of year", "-1 years") AND Timestamp <= date("now", "start of year")
+// ORDER BY
+// Timestamp
+// ASC
 
 const getRecentViolations = (req, res) => {
   sql = `
@@ -99,10 +48,81 @@ const getRecentViolations = (req, res) => {
   })
 }
 
-const getViolationStatsWeek = (req, res, next) => {
-  const weekAgo = format(Date.now() - 7 * 24 * 60 * 60 * 1000, `yyyy-MM-dd`);
+const getTimeStatsQuery = (range) => {
+  let timeAgo;
+  switch (range) {
+    case 'week':
+      timeAgo = `"weekday 1", "-7 days"`;
+      break;
+    case 'month':
+      timeAgo = `"start of month"`;
+      break;
+    case 'year':
+      timeAgo = `"start of year"`;
+      break;
+  }
 
-  sql = `
+  return `
+    SELECT
+      strftime('%H', Violations.Timestamp) AS violationTime,
+      COUNT(Violations.Violation) AS violationCount
+    FROM
+      Violations
+    WHERE
+      Violations.Timestamp > date("now", ${timeAgo})
+    GROUP BY
+      violationTime
+    ORDER BY
+      violationTime
+    ASC;
+  `
+}
+
+const getGuardStatsQuery = (range) => {
+  let timeAgo;
+  switch (range) {
+    case 'week':
+      timeAgo = `"weekday 1", "-7 days"`;
+      break;
+    case 'month':
+      timeAgo = `"start of month"`;
+      break;
+    case 'year':
+      timeAgo = `"start of year"`;
+      break;
+  }
+
+  return `
+    SELECT
+      COUNT(Violations.Violation) AS violationCount,
+      Guard AS violationGuard
+    FROM 
+      Violations
+    WHERE 
+      Violations.Timestamp > date("now", ${timeAgo})
+	 GROUP BY 
+      violationGuard
+    ORDER BY
+      violationGuard
+    ASC;
+`
+}
+
+const getViolationStatsQuery = (range) => {
+  let timeAgo;
+  switch (range) {
+    case 'week':
+      timeAgo = `"weekday 1", "-7 days"`;
+      break;
+    case 'month':
+      timeAgo = `"start of month"`;
+      break;
+    case 'year':
+      timeAgo = `"start of year"`;
+      break;
+  }
+
+  return `
     SELECT 
       COUNT(Violations.Violation) AS count, 
       Violations.Violation AS violation,
@@ -115,192 +135,103 @@ const getViolationStatsWeek = (req, res, next) => {
     ON
       Violations.Violation = ViolationsDesc.Violation
     WHERE
-      Violations.Timestamp > date('${weekAgo}')
+      Violations.Timestamp > date("now", ${timeAgo})
     GROUP BY 
       Violations.Violation
     ORDER BY 
       count 
     DESC;
   `
+}
 
-  db.all(sql, [], (err, rows) => {
+const getCourseYearStatsQuery = (range) => {
+  let timeAgo;
+  switch (range) {
+    case 'week':
+      timeAgo = `"weekday 1", "-7 days"`;
+      break;
+    case 'month':
+      timeAgo = `"start of month"`;
+      break;
+    case 'year':
+      timeAgo = `"start of year"`;
+      break;
+  }
+
+  return `
+    SELECT 
+      Students.Course as studentCourse,
+      Students.Year as studentYear,
+      COUNT(Violations.Violation) AS violationCount, 
+      ViolationsDesc.IsMajor AS violationIsMajor
+    FROM 
+      Violations 
+    JOIN
+      ViolationsDesc
+    ON
+      Violations.Violation = ViolationsDesc.Violation
+    JOIN
+      Students
+    ON 
+      Students.StudentId = Violations.StudentId
+    WHERE
+      Violations.Timestamp > date("now", ${timeAgo})
+    GROUP BY 
+      Students.Course,
+      Students.Year,
+      ViolationsDesc.isMajor
+    ORDER BY 
+      studentCourse
+    ASC;
+  `
+}
+
+const getViolationStatsWeek = (req, res, next) => {
+  db.all(getViolationStatsQuery('week'), [], (err, rows) => {
     if (err) return console.error(err);
     res.locals.week = rows
     next()
   })
 }
-
 const getViolationStatsMonth = (req, res, next) => {
-  const monthAgo = format(Date.now() - 30 * 24 * 60 * 60 * 1000, `yyyy-MM-dd`);
-
-  sql = `
-    SELECT 
-      COUNT(Violations.Violation) AS count, 
-      Violations.Violation AS violation,
-      ViolationsDesc.IsMajor AS violationIsMajor,
-      ViolationsDesc.Number AS violationNumber
-    FROM 
-      Violations 
-    INNER JOIN
-      ViolationsDesc
-    ON
-      Violations.Violation = ViolationsDesc.Violation
-    WHERE
-      Violations.Timestamp > date('${monthAgo}')
-    GROUP BY 
-      Violations.Violation
-    ORDER BY 
-      count 
-    DESC;
-  `
-
-  db.all(sql, [], (err, rows) => {
+  db.all(getViolationStatsQuery('month'), [], (err, rows) => {
     if (err) return console.error(err);
     res.locals.month = rows;
     next()
   })
 }
-
 const getViolationStatsYear = (req, res, next) => {
-  const yearAgo = format(Date.now() - 365 * 24 * 60 * 60 * 1000, `yyyy-MM-dd`);
-
-  sql = `
-    SELECT 
-      COUNT(Violations.Violation) AS count, 
-      Violations.Violation AS violation,
-      ViolationsDesc.IsMajor AS violationIsMajor,
-      ViolationsDesc.Number AS violationNumber
-    FROM 
-      Violations 
-    INNER JOIN
-      ViolationsDesc
-    ON
-      Violations.Violation = ViolationsDesc.Violation
-    WHERE
-      Violations.Timestamp > date('${yearAgo}')
-    GROUP BY 
-      Violations.Violation
-    ORDER BY 
-      count 
-    DESC;
-  `
-
-  db.all(sql, [], (err, rows) => {
+  db.all(getViolationStatsQuery('year'), [], (err, rows) => {
     if (err) return console.error(err);
 
     res.status(200).send({ success: true, data: { week: res.locals.week, month: res.locals.month, year: rows } });
   })
 }
 
+// ================================================= >
+
 const getCourseAndYearStatsWeek = (req, res, next) => {
-  const weekAgo = format(Date.now() - 7 * 24 * 60 * 60 * 1000, `yyyy-MM-dd`);
-
-  sql = `
-    SELECT 
-      Students.Course as studentCourse,
-      Students.Year as studentYear,
-      COUNT(Violations.Violation) AS violationCount, 
-      ViolationsDesc.IsMajor AS violationIsMajor
-    FROM 
-      Violations 
-    JOIN
-      ViolationsDesc
-    ON
-      Violations.Violation = ViolationsDesc.Violation
-    JOIN
-      Students
-    ON 
-      Students.StudentId = Violations.StudentId
-    WHERE
-      Violations.Timestamp > date('${weekAgo}')
-    GROUP BY 
-      Students.Course,
-      Students.Year,
-      ViolationsDesc.isMajor
-    ORDER BY 
-      studentCourse
-    ASC;
-  `
-
-  db.all(sql, [], (err, rows) => {
+  db.all(getCourseYearStatsQuery('week'), [], (err, rows) => {
     if (err) return console.error(err);
     res.locals.week = rows
     next()
   })
 }
-
 const getCourseAndYearStatsMonth = (req, res, next) => {
-  const monthAgo = format(Date.now() - 30 * 24 * 60 * 60 * 1000, `yyyy-MM-dd`);
-
-  sql = `
-    SELECT 
-      Students.Course as studentCourse,
-      Students.Year as studentYear,
-      COUNT(Violations.Violation) AS violationCount, 
-      ViolationsDesc.IsMajor AS violationIsMajor
-    FROM 
-      Violations 
-    JOIN
-      ViolationsDesc
-    ON
-      Violations.Violation = ViolationsDesc.Violation
-    JOIN
-      Students
-    ON 
-      Students.StudentId = Violations.StudentId
-    WHERE
-      Violations.Timestamp > date('${monthAgo}')
-    GROUP BY 
-      Students.Course,
-      Students.Year,
-      ViolationsDesc.isMajor
-    ORDER BY 
-      studentCourse
-    ASC;
-  `
-
-  db.all(sql, [], (err, rows) => {
+  db.all(getCourseYearStatsQuery('month'), [], (err, rows) => {
     if (err) return console.error(err);
     res.locals.month = rows
     next()
   })
 }
-
 const getCourseAndYearStatsYear = (req, res, next) => {
-  const yearAgo = format(Date.now() - 365 * 24 * 60 * 60 * 1000, `yyyy-MM-dd`);
-
-  sql = `
-    SELECT 
-      Students.Course as studentCourse,
-      Students.Year as studentYear,
-      COUNT(Violations.Violation) AS violationCount, 
-      ViolationsDesc.IsMajor AS violationIsMajor
-    FROM 
-      Violations 
-    JOIN
-      ViolationsDesc
-    ON
-      Violations.Violation = ViolationsDesc.Violation
-    JOIN
-      Students
-    ON 
-      Students.StudentId = Violations.StudentId
-    WHERE
-      Violations.Timestamp > date('${yearAgo}')
-    GROUP BY 
-      Students.Course,
-      Students.Year,
-      ViolationsDesc.isMajor
-    ORDER BY 
-      studentCourse
-    ASC;
-  `
-
-  db.all(sql, [], (err, rows) => {
+  db.all(getCourseYearStatsQuery('year'), [], (err, rows) => {
     if (err) return console.error(err);
     res.status(200).send({ success: true, data: { week: res.locals.week, month: res.locals.month, year: rows } });
   })
 }
+
+// ================================================= >
 
 const getTimeStatsWeek = (req, res, next) => {
   db.all(getTimeStatsQuery('week'), [], (err, rows) => {
@@ -309,7 +240,6 @@ const getTimeStatsWeek = (req, res, next) => {
     next()
   })
 }
-
 const getTimeStatsMonth = (req, res, next) => {
   db.all(getTimeStatsQuery('month'), [], (err, rows) => {
     if (err) return console.error(err);
@@ -317,13 +247,14 @@ const getTimeStatsMonth = (req, res, next) => {
     next()
   })
 }
-
 const getTimeStatsYear = (req, res, next) => {
   db.all(getTimeStatsQuery('year'), [], (err, rows) => {
     if (err) return console.error(err);
     res.status(200).send({ success: true, data: { week: res.locals.week, month: res.locals.month, year: rows } });
   })
 }
+
+// ================================================= >
 
 const getGuardStatsWeek = (req, res, next) => {
   db.all(getGuardStatsQuery('week'), [], (err, rows) => {
@@ -332,7 +263,6 @@ const getGuardStatsWeek = (req, res, next) => {
     next()
   })
 }
-
 const getGuardStatsMonth = (req, res, next) => {
   db.all(getGuardStatsQuery('month'), [], (err, rows) => {
     if (err) return res.status(500).send({ success: false, message: err })
@@ -340,7 +270,6 @@ const getGuardStatsMonth = (req, res, next) => {
     next()
   })
 }
-
 const getGuardStatsYear = (req, res, next) => {
   db.all(getGuardStatsQuery('year'), [], (err, rows) => {
     if (err) return res.status(500).send({ success: false, message: err })
@@ -354,6 +283,8 @@ const getGuardStatsYear = (req, res, next) => {
     })
   })
 }
+
+// ================================================= >
 
 const registerViolation = (req, res, next) => {
   const values = Object.values(req.body);
