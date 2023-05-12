@@ -5,6 +5,7 @@ import Violation from 'pages/stats/ViolationPage.vue';
 import Course from 'pages/stats/CoursePage.vue';
 import Time from 'pages/stats/TimePage.vue';
 import Guard from 'pages/stats/GuardPage.vue';
+import Settings from 'pages/SettingsPage.vue';
 import Login from 'src/pages/LoginPage.vue';
 
 const routes = [
@@ -66,6 +67,14 @@ const routes = [
         component: Guard,
         meta: {
           subTitle: 'Guard'
+        }
+      },
+      {
+        path: 'settings',
+        name: 'settingsPage',
+        component: Settings,
+        meta: {
+          title: 'Settings'
         }
       }
     ]

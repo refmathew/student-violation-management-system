@@ -10,6 +10,9 @@
         <drawer-button v-for="( button, index ) in drawerStatButtons" :key="index" :title="button.title"
           :icon="button.icon" :link="button.link" :showTitle="isHovered" />
       </div>
+      <drawer-button title="Settings" icon="settings" link="/settings" :showTitle="isHovered" />
+      <div>
+      </div>
       <div>
         <drawer-button title="Sign out" icon="signout" link="/login" :showTitle="isHovered" />
       </div>
@@ -34,11 +37,6 @@ const drawerGenButtons = [
     icon: 'find',
     link: '/find'
   },
-  // {
-  // title: 'Filter violations',
-  // icon: 'filter',
-  // link: '/filter'
-  // },
 ]
 
 const drawerStatButtons = [
