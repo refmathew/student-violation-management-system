@@ -382,6 +382,7 @@ const registerGuard = (req, res, next) => {
   `
 
   db.run(sql, values, (err, result) => {
+    console.log(err, result)
     if (err) {
       if (err.errno === 19) res.status(400).send({ success: false, message: "Guard already exists" })
     } else {

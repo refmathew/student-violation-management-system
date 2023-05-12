@@ -153,7 +153,7 @@ db.all('SELECT StudentId from Students', (err, rows) => {
 const getRandomData = () => {
   let studentId = _.sample(studentIds);
   let guard = _.sample(guards);
-  let timestamp = randomDate(new Date(2023, 0, 1), new Date());
+  let timestamp = randomDate(new Date(2019, 0, 1), new Date());
   let violation;
 
   /* Guards usually only spot minor violations */
@@ -170,7 +170,7 @@ const getRandomData = () => {
   return randomData;
 }
 
-const amountOfData = 8192;
+const amountOfData = 65536;
 
 
 setTimeout(() => {

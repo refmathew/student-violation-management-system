@@ -118,5 +118,39 @@ const register = (req, res) => {
   })
 }
 
+const getGuardList = (req, res) => {
+  sql = `
+    SELECT 
+      firstname || ' ' || lastname AS name
+    FROM 
+      Guard;
+  `
+  db.all(sql, [], (err, rows) => {
+    if (err) return res.status(500).send({ success: false, message: err })
+    res.status(200).send({ success: true, message: "Guard list retrieved", data: rows });
+  })
+}
 
-module.exports = { checkQueryValidity, findStudent, getStudentData, register, recordViolation, };
+const getViolationList = (req, res) => {
+  sql = `
+    SELECT 
+      Violation AS violation
+    FROM 
+      ViolationsDesc;
+  `
+
+  db.all(sql, [], (err, rows) => {
+    if (err) return res.status(500).send({ success: false, message: err })
+    res.status(200).send({ success: true, message: "Violation list retrieved", data: rows });
+  })
+}
+
+module.exports = {
+  checkQueryValidity,
+  findStudent,
+  getGuardList,
+  getStudentData,
+  getViolationList,
+  register,
+  recordViolation,
+};

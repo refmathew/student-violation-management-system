@@ -2,7 +2,15 @@ const express = require('express');
 const router = express.Router();
 const checkEmpty = require('../middleware/checkEmpty');
 const authenticate = require('../middleware/authenticate');
-const { checkQueryValidity, findStudent, getStudentData, register, recordViolation } = require('../controllers/student');
+const {
+  checkQueryValidity,
+  findStudent,
+  getGuardList,
+  getStudentData,
+  getViolationList,
+  register,
+  recordViolation
+} = require('../controllers/student');
 
 router.use(checkEmpty);
 
@@ -14,5 +22,11 @@ router.route('/record-violation')
 
 router.route('/find')
   .get(checkQueryValidity, findStudent, getStudentData);
+
+router.route('/get-violation-list')
+  .get(getViolationList);
+
+router.route('/get-guard-list')
+  .get(getGuardList);
 
 module.exports = router;

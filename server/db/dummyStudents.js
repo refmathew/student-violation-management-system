@@ -345,16 +345,16 @@ let sql = 'INSERT INTO Students (StudentId, Lastname, Firstname, Course, Year) V
 
 const getRandomId = () => {
   /* 20x0 */
-  let yearTenths;
+  let yearTens;
   /* 200x */
   let yearOnes;
 
-  yearTenths = _.random(2);
-  yearTenths === 2
+  yearTens = _.random(2);
+  yearTens === 2
     ? yearOnes = _.random(3)
     : yearOnes = _.random(9);
 
-  const studentId = `${yearTenths}${yearOnes}-00${_.random(9)}${_.random(9)}${_.random(9)}`;
+  const studentId = `${yearTens}${yearOnes}-0${_.random(1)}${_.random(9)}${_.random(9)}${_.random(9)}`;
 
   /* if the studentId already exists, call the fn again */
   if (studentIds.includes(studentId)) {
@@ -381,12 +381,12 @@ const getRandomData = () => {
 }
 
 
-const amountOfData = 512;
+const amountOfData = 8192;
 
 for (let i = 0; i < amountOfData; i++) {
   let randomData = getRandomData();
 
-  if (i === 511) {
+  if (i === amountOfData - 1) {
     sql += `(${randomData.join(', ')})`
   } else {
     sql += `(${randomData.join(', ')}), `
