@@ -18,6 +18,14 @@ const {
   registerViolation,
 } = require('../controllers/admin.js');
 
+const {
+  getViolationStatsMonthLastYear,
+  getViolationStatsYearLastYear,
+  getViolationStatsMonthAllTime,
+  getViolationStatsYearAllTime,
+} = require('../controllers/admin-2.js');
+
+
 router.route('/register-guard')
   .post(registerGuard);
 
@@ -27,14 +35,14 @@ router.route('/register-violation')
 router.route('/violations/recent')
   .get(getRecentViolations);
 
+router.route('/violations/stats/violations')
+  .get(getViolationStatsWeek, getViolationStatsMonth, getViolationStatsYear, getViolationStatsMonthLastYear, getViolationStatsYearLastYear, getViolationStatsMonthAllTime, getViolationStatsYearAllTime);
+
 router.route('/violations/stats/course-and-year')
   .get(getCourseAndYearStatsWeek, getCourseAndYearStatsMonth, getCourseAndYearStatsYear);
 
 router.route('/violations/stats/time')
   .get(getTimeStatsWeek, getTimeStatsMonth, getTimeStatsYear)
-
-router.route('/violations/stats/violations')
-  .get(getViolationStatsWeek, getViolationStatsMonth, getViolationStatsYear);
 
 router.route('/violations/stats/guard')
   .get(getGuardStatsWeek, getGuardStatsMonth, getGuardStatsYear);

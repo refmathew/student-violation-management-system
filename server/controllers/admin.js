@@ -204,7 +204,8 @@ const getViolationStatsYear = (req, res, next) => {
   db.all(getViolationStatsQuery('year'), [], (err, rows) => {
     if (err) return console.error(err);
 
-    res.status(200).send({ success: true, data: { week: res.locals.week, month: res.locals.month, year: rows } });
+    res.locals.year = rows;
+    next();
   })
 }
 
