@@ -63,7 +63,7 @@ const getStudentDataAllTime = (req, res, next) => {
       .send({
         success: true,
         data: {
-          violations: res.locals.violations,
+          data: res.locals.violations,
           stats: {
             thisYear: res.locals.thisYear,
             lastYear: res.locals.lastYear,

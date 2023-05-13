@@ -1,11 +1,10 @@
 <template>
-  <fieldset class="scope-buttons__container">
-    <label class="scope-buttons__button" :class="{ 'scope-buttons__button--active': settingStore.scope === scope }"
-      v-for="( scope, index ) in scopes" :key="index" :for="scope" v-ripple>
-      <input class="scope-buttons__button-radio" type="radio" :id="scope" :value="scope" v-model="radioButtonValue"
-        @input="handleRadioClick" />
-      <span class="scope-buttons__button-text" v-text="scope[0].toUpperCase() + scope.slice(1)" />
-    </label>
+  <fieldset class="compare-buttons__container">
+    <span class="compare-buttons__title">
+      Compare:
+    </span>
+    <q-checkbox class="compare-buttons__checkbox" v-model="lastYear" label="Last year" color="deep-purple-4" />
+    <q-checkbox class="compare-buttons__checkbox" v-model="allTime" label="All time" color="deep-purple-4" />
   </fieldset>
 </template>
 
@@ -18,55 +17,42 @@ export default {
       radioButtonValue: '',
       settingStore: useSettingStore(),
       scopes: ['week', 'month', 'year'],
+      lastYear: false,
+      allTime: false,
     }
   },
-  methods: {
-    handleRadioClick(e) {
-      this.settingStore.$patch({ scope: e.target.value })
+  watch: {
+    lastYear(upd, old) {
+      this.settingStore.$patch({ compareWith: { lastYear: upd } })
+    },
+    allTime(upd, old) {
+      this.settingStore.$patch({ compareWith: { allTime: upd } })
     }
-  },
+  }
 }
 </script>
 
 <style scoped lang="scss">
-.scope-buttons {
+.compare-buttons {
 
   &__container {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     gap: 1.2rem;
   }
 
-  &__button {
-    position: relative;
-    padding: .8rem 1.6rem;
-    background-color: $secondary-3;
-    border-radius: .8rem;
-    box-shadow: 0 .4rem 0 $primary-2;
-    cursor: pointer;
-    transition: background-color 128ms ease, box-shadow 128ms ease, margin 128ms ease;
-    margin-bottom: 0;
-
-    &:hover {
-      background-color: $secondary-1;
-    }
-  }
-
-  &__button--active {
-    box-shadow: 0 0 0 $primary-2;
-    margin-bottom: -4px;
-
-    &:hover {
-      background-color: $secondary-3;
-    }
-  }
-
-  &__button-radio {}
-
-  &__button-text {
-    font-size: 1.2rem;
+  &__title {
+    font-size: 1.6rem;
     font-weight: 600;
     color: $primary-2;
+  }
+
+  &__checkbox {
+    & .q-checkbox__label {
+      font-size: 1.2rem !important;
+      font-weight: 600;
+      color: $primary-2;
+    }
   }
 }
 </style>

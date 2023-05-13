@@ -1,19 +1,64 @@
 <template>
-  <q-page class="page--stats--violation">
-    <div class="page--stats--violation__chart-title">
-      {{ `${this.getLevel === 1 ? 'MAJOR' : 'MINOR'} Violations this ${this.getScope.toUpperCase()}` }}
-    </div>
-    <div class="page--stats--violation__main">
-      <div class="page--stats--violation__chart-container">
-        <Pie class="page--stats--violation__chart" id="my-chart-id" :options="getChartOptions" :data="getChartData" />
+  <div class="page--stats--violation__title">
+    {{ `${this.getLevel === 1 ? 'MAJOR' : 'MINOR'} Violations of the ${this.getScope.toUpperCase()}` }}
+  </div>
+  <q-page class="main">
+    <div class="page--stats--violation">
+      <div class="page--stats--violation__chart-title">
+        This Year
       </div>
-      <table class="page--stats--violation__legends">
-        <tr class="page--stats--violation__legend" :data-index="index % 4" v-for="( violation, index ) in getViolations"
-          :key="index">
-          <td class="page--stats--violation__legend-number">{{ violation.violationNumber }} </td>
-          <td>{{ violation.violation }}</td>
-        </tr>
-      </table>
+      <div class="page--stats--violation__main"
+        :class="{ 'page--stats--violation__main--with-others': settingStore.compareWith.lastYear || settingStore.compareWith.allTime }">
+        <div class="page--stats--violation__chart-container">
+          <Pie class="page--stats--violation__chart" id="my-chart-id" :options="getChartOptions"
+            :data="getCurrentYearChartData" />
+        </div>
+        <table class="page--stats--violation__legends">
+          <tr class="page--stats--violation__legend" :data-index="index % 4"
+            v-for="( violation, index ) in getCurrentYearViolations" :key="index">
+            <td class="page--stats--violation__legend-number">{{ violation.violationNumber }} </td>
+            <td>{{ violation.violation }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="page--stats--violation" v-show="settingStore.scope !== 'week' && settingStore.compareWith.lastYear">
+      <div class="page--stats--violation__chart-title">
+        Last Year
+      </div>
+      <div class="page--stats--violation__main"
+        :class="{ 'page--stats--violation__main--with-others': settingStore.compareWith.lastYear }">
+        <div class="page--stats--violation__chart-container">
+          <Pie class="page--stats--violation__chart" id="my-chart-id" :options="getChartOptions"
+            :data="getLastYearChartData" />
+        </div>
+        <table class="page--stats--violation__legends">
+          <tr class="page--stats--violation__legend" :data-index="index % 4"
+            v-for="( violation, index ) in getLastYearViolations" :key="index">
+            <td class="page--stats--violation__legend-number">{{ violation.violationNumber }} </td>
+            <td>{{ violation.violation }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="page--stats--violation" v-show="settingStore.scope !== 'week' && settingStore.compareWith.allTime">
+      <div class="page--stats--violation__chart-title">
+        All Time
+      </div>
+      <div class="page--stats--violation__main"
+        :class="{ 'page--stats--violation__main--with-others': settingStore.compareWith.allTime }">
+        <div class="page--stats--violation__chart-container">
+          <Pie class="page--stats--violation__chart" id="my-chart-id" :options="getChartOptions"
+            :data="getAllTimeChartData" />
+        </div>
+        <table class="page--stats--violation__legends">
+          <tr class="page--stats--violation__legend" :data-index="index % 4"
+            v-for="( violation, index ) in getAllTimeViolations" :key="index">
+            <td class="page--stats--violation__legend-number">{{ violation.violationNumber }} </td>
+            <td>{{ violation.violation }}</td>
+          </tr>
+        </table>
+      </div>
     </div>
   </q-page>
 </template>
@@ -41,7 +86,6 @@ export default {
       if (!this.violationStore.stats.violations.year) {
         return null;
       }
-
       return {
         options: {
           responsive: true,
@@ -100,16 +144,13 @@ export default {
         }
       }
     },
-    getTitle() {
-      return `Number of violations(${this.getLevel}) by${this.getScope}`
-    },
     getScope() {
       return this.settingStore.scope;
     },
     getLevel() {
       return this.settingStore.displayMajor;
     },
-    getLabels() {
+    getCurrentYearLabels() {
       if (!this.violationStore.stats.violations.year) {
         return null;
       }
@@ -117,28 +158,64 @@ export default {
         .filter(violation => violation.violationIsMajor === this.getLevel)
         .map(violation => `[${violation.violationNumber}] ${violation.violation}`);
     },
-    getData() {
-      if (!this.violationStore.stats.violations.year) {
-        return null;
-      }
+    getLastYearLabels() {
+      if (!this.violationStore.stats.violations.lastYear) return null;
+      if (this.getScope === 'week') return [];
+
+      return this.violationStore.stats.violations.lastYear[this.getScope]
+        .filter(violation => violation.violationIsMajor === this.getLevel)
+        .map(violation => `[${violation.violationNumber}] ${violation.violation}`);
+    },
+    getAllTimeLabels() {
+      if (!this.violationStore.stats.violations.lastYear) return null;
+      if (this.getScope === 'week') return [];
+
+      return this.violationStore.stats.violations.allTime[this.getScope]
+        .filter(violation => violation.violationIsMajor === this.getLevel)
+        .map(violation => `[${violation.violationNumber}] ${violation.violation}`);
+    },
+    getCurrentYearData() {
+      if (!this.violationStore.stats.violations.year) return null;
       return this.violationStore.stats.violations[this.getScope]
         .filter(violation => violation.violationIsMajor === this.getLevel)
         .map(violation => violation.count);
     },
-    getViolations() {
-      if (!this.violationStore.stats.violations.year) {
-        return null;
-      }
-
+    getLastYearData() {
+      if (!this.violationStore.stats.violations.lastYear) return null;
+      if (this.getScope === 'week') return [];
+      return this.violationStore.stats.violations.lastYear[this.getScope]
+        .filter(violation => violation.violationIsMajor === this.getLevel)
+        .map(violation => violation.count);
+    },
+    getAllTimeData() {
+      if (!this.violationStore.stats.violations.allTime) return null;
+      if (this.getScope === 'week') return [];
+      return this.violationStore.stats.violations.allTime[this.getScope]
+        .filter(violation => violation.violationIsMajor === this.getLevel)
+        .map(violation => violation.count);
+    },
+    getCurrentYearViolations() {
+      if (!this.violationStore.stats.violations.year) return null;
       return this.violationStore.stats.violations[this.getScope]
         .filter(violation => violation.violationIsMajor === this.getLevel)
     },
-    getChartData() {
+    getLastYearViolations() {
+      if (!this.violationStore.stats.violations.lastYear) return null;
+      if (this.getScope === 'week') return [];
+      return this.violationStore.stats.violations.lastYear[this.getScope]
+        .filter(violation => violation.violationIsMajor === this.getLevel)
+    },
+    getAllTimeViolations() {
+      if (!this.violationStore.stats.violations.allTime) return null;
+      if (this.getScope === 'week') return [];
+      return this.violationStore.stats.violations.allTime[this.getScope]
+        .filter(violation => violation.violationIsMajor === this.getLevel)
+    },
+    getCurrentYearChartData() {
       return {
-        labels: this.getLabels,
+        labels: this.getCurrentYearLabels,
         datasets: [{
           label: 'Violation count',
-          // spacing: 2,
           offset: 32,
           borderWidth: 2,
           borderJoinStyle: 'round',
@@ -146,7 +223,39 @@ export default {
           borderColor: this.borderColors,
           hoverBackgroundColor: this.borderColors,
           hoverBorderColor: this.backgroundColors,
-          data: this.getData
+          data: this.getCurrentYearData
+        }]
+      }
+    },
+    getLastYearChartData() {
+      return {
+        labels: this.getLastYearLabels,
+        datasets: [{
+          label: 'Violation count',
+          offset: 32,
+          borderWidth: 2,
+          borderJoinStyle: 'round',
+          backgroundColor: this.backgroundColors,
+          borderColor: this.borderColors,
+          hoverBackgroundColor: this.borderColors,
+          hoverBorderColor: this.backgroundColors,
+          data: this.getLastYearData
+        }]
+      }
+    },
+    getAllTimeChartData() {
+      return {
+        labels: this.getAllTimeLabels,
+        datasets: [{
+          label: 'Violation count',
+          offset: 32,
+          borderWidth: 2,
+          borderJoinStyle: 'round',
+          backgroundColor: this.backgroundColors,
+          borderColor: this.borderColors,
+          hoverBackgroundColor: this.borderColors,
+          hoverBorderColor: this.backgroundColors,
+          data: this.getAllTimeData
         }]
       }
     },
@@ -162,11 +271,28 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.main {
+  display: flex;
+  justify-content: center;
+  gap: 3.2rem;
+
+  &>* {
+    flex: 1;
+  }
+}
+
 .page--stats--violation {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.6rem;
+
+  &__title {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: $primary-2;
+  }
 
   &__main {
     display: flex;
@@ -178,7 +304,18 @@ export default {
     }
   }
 
+  &__main--with-others {
+    flex-direction: column;
+    align-items: stretch;
+
+    &>* {
+      width: 100%;
+      flex: unset;
+    }
+  }
+
   &__chart-title {
+    text-align: center;
     font-size: 1.6rem;
     font-weight: 600;
     color: $primary-2;
@@ -186,8 +323,8 @@ export default {
 
   &__chart-container {
     position: relative;
-    width: 64%;
-    height: 100%;
+    width: 100%;
+    // height: 100%;
   }
 
   &__chart {

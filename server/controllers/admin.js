@@ -2,15 +2,6 @@ const { format } = require('date-fns');
 const _ = require('lodash');
 const db = require('../db/connect.js');
 let sql;
-// SELECT 
-// Timestamp
-// FROM 
-// Violations
-// WHERE
-// Timestamp >= date("now", "start of year", "-1 years") AND Timestamp <= date("now", "start of year")
-// ORDER BY
-// Timestamp
-// ASC
 
 const getRecentViolations = (req, res) => {
   sql = `

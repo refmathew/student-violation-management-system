@@ -7,6 +7,7 @@
     <div class="setting-drawer__main">
       <level-button :disabled="noLevelButton.includes(getRoute)" />
       <scope-button :disabled="noScopeButton.includes(getRoute)" />
+      <compare-button />
     </div>
   </div>
 </template>
@@ -14,6 +15,8 @@
 <script>
 import ScopeButton from './ScopeButton.vue';
 import LevelButton from './LevelButton.vue';
+import CompareButton from './CompareButton.vue';
+
 export default {
   data() {
     return {
@@ -27,6 +30,7 @@ export default {
       ],
       noScopeButton: [
         'indexPage',
+        'findPage',
       ],
     };
   },
@@ -54,7 +58,7 @@ export default {
       });
     })();
   },
-  components: { ScopeButton, LevelButton }
+  components: { ScopeButton, LevelButton, CompareButton }
 }
 </script>
 
