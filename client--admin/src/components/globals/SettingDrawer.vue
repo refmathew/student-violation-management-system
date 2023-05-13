@@ -5,8 +5,8 @@
       <div />
     </div>
     <div class="setting-drawer__main">
-      <level-button />
-      <scope-button />
+      <level-button :disabled="noLevelButton.includes(getRoute)" />
+      <scope-button :disabled="noScopeButton.includes(getRoute)" />
     </div>
   </div>
 </template>
@@ -14,13 +14,26 @@
 <script>
 import ScopeButton from './ScopeButton.vue';
 import LevelButton from './LevelButton.vue';
-
 export default {
   data() {
     return {
       settingDrawerHeight: undefined,
       settingDrawerHandleHeight: undefined,
+      noLevelButton: [
+        'indexPage',
+        'statsTimeAndDatePage',
+        'statsCourseAndYearPage',
+        'statsGuardPage'
+      ],
+      noScopeButton: [
+        'indexPage',
+      ],
     };
+  },
+  computed: {
+    getRoute() {
+      return this.$route.name
+    }
   },
   mounted() {
     (() => {
