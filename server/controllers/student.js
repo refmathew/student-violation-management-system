@@ -1,6 +1,80 @@
 const db = require('../db/connect');
 let sql;
 
+const getStudentStatsQuery = (scope, query) => {
+  let condition = '';
+
+  switch (scope) {
+    case 'thisYear':
+      condition = ' Violations.Timestamp > date("now", "start of year")'
+      break;
+    case 'lastYear':
+      condition = ' Violations.Timestamp > date("now", "start of year", "-1 years") AND Violations.Timestamp < date("now", "start of year")'
+      break;
+    case 'allTime':
+      condition = ' Violations.Timestamp < date("now", "start of year")'
+      break;
+  }
+  return `
+      SELECT 
+        COUNT(Violations.Violation) AS count, 
+        Violations.Violation AS violation,
+        ViolationsDesc.IsMajor AS violationIsMajor,
+        ViolationsDesc.Number AS violationNumber
+      FROM 
+        Violations 
+      INNER JOIN
+        ViolationsDesc
+      ON
+        Violations.Violation = ViolationsDesc.Violation
+      JOIN 
+        Students 
+      ON 
+        Violations.StudentId = Students.StudentId
+      WHERE
+        ${condition} AND 
+        Students.StudentId LIKE '%${query}%'
+      GROUP BY 
+        Violations.Violation
+      ORDER BY 
+        count 
+      DESC;
+  `
+}
+
+const getStudentDataThisYear = (req, res, next) => {
+  db.all(getStudentStatsQuery('thisYear', req.query.query), [], (err, rows) => {
+    if (err) return res.status(500).send({ success: false, err: err })
+    res.locals.thisYear = rows
+    next();
+  });
+}
+const getStudentDataLastYear = (req, res, next) => {
+  db.all(getStudentStatsQuery('lastYear', req.query.query), [], (err, rows) => {
+    if (err) return res.status(500).send({ success: false, err: err })
+    res.locals.lastYear = rows
+    next()
+  });
+}
+const getStudentDataAllTime = (req, res, next) => {
+  db.all(getStudentStatsQuery('allTime', req.query.query), [], (err, rows) => {
+    if (err) return res.status(500).send({ success: false, err: err })
+    res.status(200)
+      .send({
+        success: true,
+        data: {
+          violations: res.locals.violations,
+          stats: {
+            thisYear: res.locals.thisYear,
+            lastYear: res.locals.lastYear,
+            allTime: rows
+          }
+        },
+        hasMultipleStudents: false
+      })
+  });
+}
+
 const checkQueryValidity = (req, res, next) => {
   const { query } = req.query;
 
@@ -49,7 +123,7 @@ const findStudent = (req, res, next) => {
   });
 }
 
-const getStudentData = async (req, res) => {
+const getStudentData = async (req, res, next) => {
   const { query } = req.query;
 
   sql = `
@@ -77,18 +151,12 @@ const getStudentData = async (req, res) => {
       Students.StudentId 
     LIKE 
       '%${query}%'
-    OR
-      Students.LastName 
-    LIKE 
-      '%${query}%'
-    OR
-      Students.FirstName 
-    LIKE '%${query}%'
   `;
 
-  db.all(sql, [], (err, row) => {
+  db.all(sql, [], (err, rows) => {
     if (err) return res.status(500).send({ success: false, err: err })
-    res.send({ success: true, data: row, hasMultipleStudents: false })
+    res.locals.violations = rows;
+    next()
   });
 }
 
@@ -150,6 +218,9 @@ module.exports = {
   findStudent,
   getGuardList,
   getStudentData,
+  getStudentDataThisYear,
+  getStudentDataLastYear,
+  getStudentDataAllTime,
   getViolationList,
   register,
   recordViolation,
