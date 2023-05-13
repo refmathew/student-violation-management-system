@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export const useSettingStore = defineStore('setting', {
   state: () => {
     return {
-      scope: 'week',
+      scope: 'year',
       displayMajor: 1,
     }
   },
