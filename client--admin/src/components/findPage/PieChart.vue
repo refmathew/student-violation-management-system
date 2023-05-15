@@ -3,12 +3,13 @@
     <div class="chart__chart-title">
       {{ chartDataScope }}
     </div>
-    <div class="chart__main"
+    <div v-if="chartData" class="chart__main"
       :class="{ 'chart__main--with-others': settingStore.compareWith.lastYear || settingStore.compareWith.allTime }">
       <div class="chart__chart-container">
         <Pie class="chart__chart" id="my-chart-id" :options="chartOptions" :data="chartData" />
       </div>
     </div>
+    <div v-else>No data here</div>
   </div>
 </template>
 

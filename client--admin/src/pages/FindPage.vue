@@ -25,13 +25,16 @@
                                   ${studentStore.queriedStudent.data.data[0].studentYear} year`
                 }}</div>
               </div>
-              <div class="page--find__charts">
-                <pie-chart chartDataScope="This Year" :chartOptions="getChartOptions" :chartData="getThisYearChartData" :chartViolations="studentStore.getThisYearViolations"/>
-                <pie-chart v-show="settingStore.compareWith.lastYear" chartDataScope="Last Year" :chartOptions="getChartOptions" :chartData="getLastYearChartData" :chartViolations="studentStore.getLastYearViolations"/>
-                <pie-chart v-show="settingStore.compareWith.allTime" chartDataScope="All Time" :chartOptions="getChartOptions" :chartData="getAllTimeChartData" :chartViolations="studentStore.getAllTimeViolations"/>
-              </div>
               <violation-table class="page--find__data--student-table" v-if="studentStore.queriedStudent.data.data" :violations="studentStore.queriedStudent.data.data"
                 :showMajor=false title="Violation" />
+              <div class="page--find__charts">
+                <div class="page--find__charts-title">{{`${studentStore.queriedStudent.data.data[0].studentFirstName} ${studentStore.queriedStudent.data.data[0].studentLastName}'s ${settingStore.displayMajor === 0 ? "MINOR" : "MAJOR"} Violations of the ${settingStore.scope.toUpperCase()}`}}</div>
+                <div class="page--find__charts-main">
+                  <pie-chart chartDataScope="This Year" :chartOptions="getChartOptions" :chartData="getThisYearChartData" :chartViolations="studentStore.getThisYearViolations"/>
+                  <pie-chart v-show="settingStore.compareWith.lastYear" chartDataScope="Last Year" :chartOptions="getChartOptions" :chartData="getLastYearChartData" :chartViolations="studentStore.getLastYearViolations"/>
+                  <pie-chart v-show="settingStore.compareWith.allTime" chartDataScope="All Time" :chartOptions="getChartOptions" :chartData="getAllTimeChartData" :chartViolations="studentStore.getAllTimeViolations"/>
+                </div>
+              </div>
             </div>
             <div class="page--find__data--error" v-else>{{ studentStore.queriedStudent.message }}</div>
           </template>
@@ -98,7 +101,7 @@ export default {
             display: true,
             fullsize: true,
             align: 'left',
-            position: 'top',
+            position: 'bottom',
           },
         }
       }
@@ -236,10 +239,25 @@ export default {
 
     &__charts {
       display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+    &__charts-main {
+      width: 100%;
+      display: flex;
       align-items:flex-end;
+
       & > * {
         flex: 1;
       }
     }
+    &__charts-title {
+      text-align: center;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: $primary-2;
+}
+
+  
 }
 </style>
