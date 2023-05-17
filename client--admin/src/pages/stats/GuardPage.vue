@@ -4,26 +4,46 @@
       {{ getTitle }}
     </div>
     <div class="page--stats--guard__chart-container">
-      <Radar class="page--stats--guard__chart" v-if="violationStore.stats.guard.year" id="my-chart-id"
-        :options="getChartOptions" :data="getChartData" />
+      <Radar
+        class="page--stats--guard__chart"
+        v-if="violationStore.stats.guard.year"
+        id="my-chart-id"
+        :options="getChartOptions"
+        :data="getChartData"
+      />
     </div>
   </q-page>
 </template>
 
 <script>
-import { Radar } from 'vue-chartjs';
-import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend } from 'chart.js';
-import { useViolationStore } from 'src/stores/violation-store';
-import { useSettingStore } from 'src/stores/setting-store';
+import { Radar } from "vue-chartjs";
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { useViolationStore } from "src/stores/violation-store";
+import { useSettingStore } from "src/stores/setting-store";
 
-ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+);
 
 export default {
   data() {
     return {
       violationStore: useViolationStore(),
       settingStore: useSettingStore(),
-    }
+    };
   },
   computed: {
     getChartOptions() {
@@ -36,24 +56,24 @@ export default {
           responsive: true,
           maintainAspectRation: false,
           parsing: {
-            key: 'violationCount'
-          }
+            key: "violationCount",
+          },
         },
         plugins: {
-          type: 'radar',
+          type: "radar",
           colors: true,
           datalabels: {
-            color: '#120e41',
+            color: "#120e41",
           },
           legend: {
             display: true,
             fullsize: true,
           },
-        }
-      }
+        },
+      };
     },
     getTitle() {
-      return `Violations by Guard this ${this.getScope.toUpperCase()}`
+      return `Violations by Guard this ${this.getScope.toUpperCase()}`;
     },
     getScope() {
       return this.settingStore.scope;
@@ -68,20 +88,20 @@ export default {
           {
             label: `Violations by Guard this ${this.getScope}`,
             borderWidth: 2,
-            borderJoinStyle: 'round',
-            backgroundColor: '#6A79FF29',
-            borderColor: '#6A79FFFF',
-            pointBackgroundColor: '#6A79FFFF',
-            pointBorderColor: '#FFFFFFFF',
-            pointHoverBackgroundColor: '#FFFFFFFF',
-            pointHoverBorderColor: '#6A79FFFF',
+            borderJoinStyle: "round",
+            backgroundColor: "#6A79FF29",
+            borderColor: "#6A79FFFF",
+            pointBackgroundColor: "#6A79FFFF",
+            pointBorderColor: "#FFFFFFFF",
+            pointHoverBackgroundColor: "#FFFFFFFF",
+            pointHoverBorderColor: "#6A79FFFF",
             pointRadius: 8,
             pointBorderWidth: 2,
             fill: true,
             data: this.violationStore.getGuardStats,
-          }
+          },
         ],
-      }
+      };
     },
   },
   setup() {
@@ -89,7 +109,7 @@ export default {
     violationStore.requestGuardStats();
   },
   components: { Radar },
-}
+};
 </script>
 
 <style scoped lang="scss">

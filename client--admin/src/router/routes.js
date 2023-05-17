@@ -1,99 +1,99 @@
-import Index from 'pages/IndexPage.vue';
-import Find from 'pages/FindPage.vue';
-import Filter from 'pages/FilterPage.vue';
-import Violation from 'pages/stats/ViolationPage.vue';
-import Course from 'pages/stats/CoursePage.vue';
-import Time from 'pages/stats/TimePage.vue';
-import Guard from 'pages/stats/GuardPage.vue';
-import Settings from 'pages/SettingsPage.vue';
-import Login from 'src/pages/LoginPage.vue';
+import Index from "pages/IndexPage.vue";
+import Find from "pages/FindPage.vue";
+import Filter from "pages/FilterPage.vue";
+import Violation from "pages/stats/ViolationPage.vue";
+import Course from "pages/stats/CoursePage.vue";
+import Time from "pages/stats/TimePage.vue";
+import Guard from "pages/stats/GuardPage.vue";
+import Settings from "pages/SettingsPage.vue";
+import Login from "src/pages/LoginPage.vue";
 
 const routes = [
   {
-    path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    path: "/",
+    component: () => import("layouts/MainLayout.vue"),
     children: [
       {
-        path: '',
-        name: 'indexPage',
+        path: "",
+        name: "indexPage",
         component: Index,
         meta: {
-          title: 'Home'
-        }
+          title: "Home",
+        },
       },
       {
-        path: 'find',
-        name: 'findPage',
+        path: "find",
+        name: "findPage",
         component: Find,
         meta: {
-          title: 'Find student'
-        }
+          title: "Find student",
+        },
       },
       {
-        path: 'filter',
-        name: 'filterPage',
+        path: "filter",
+        name: "filterPage",
         component: Filter,
         meta: {
-          title: 'Filter violations'
-        }
+          title: "Filter violations",
+        },
       },
       {
-        path: 'stats/violation',
-        name: 'statsViolationPage',
+        path: "stats/violation",
+        name: "statsViolationPage",
         component: Violation,
         meta: {
-          subTitle: 'Violation'
-        }
+          subTitle: "Violation",
+        },
       },
       {
-        path: 'stats/time-and-date',
-        name: 'statsTimeAndDatePage',
+        path: "stats/time-and-date",
+        name: "statsTimeAndDatePage",
         component: Time,
         meta: {
-          subTitle: 'Time of the Day'
-        }
+          subTitle: "Time of the Day",
+        },
       },
       {
-        path: 'stats/course-and-year',
-        name: 'statsCourseAndYearPage',
+        path: "stats/course-and-year",
+        name: "statsCourseAndYearPage",
         component: Course,
         meta: {
-          subTitle: 'Course & Year'
-        }
+          subTitle: "Course & Year",
+        },
       },
       {
-        path: 'stats/guard',
-        name: 'statsGuardPage',
+        path: "stats/guard",
+        name: "statsGuardPage",
         component: Guard,
         meta: {
-          subTitle: 'Guard'
-        }
+          subTitle: "Guard",
+        },
       },
       {
-        path: 'settings',
-        name: 'settingsPage',
+        path: "settings",
+        name: "settingsPage",
         component: Settings,
         meta: {
-          title: 'Settings'
-        }
-      }
-    ]
+          title: "Settings",
+        },
+      },
+    ],
   },
   {
-    path: '/login',
-    name: 'loginPage',
+    path: "/login",
+    name: "loginPage",
     component: Login,
     meta: {
-      title: 'Login'
-    }
+      title: "Login",
+    },
   },
 
   // Always leave this as last one,
   // but you can also remove it
   {
-    path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue')
-  }
-]
+    path: "/:catchAll(.*)*",
+    component: () => import("pages/ErrorNotFound.vue"),
+  },
+];
 
-export default routes
+export default routes;

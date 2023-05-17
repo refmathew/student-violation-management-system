@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 const url = process.env.DATA_SERVER;
 
@@ -12,6 +12,6 @@ class StudentService {
       return e.response.data;
     }
   }
-};
+}
 
 export default StudentService;

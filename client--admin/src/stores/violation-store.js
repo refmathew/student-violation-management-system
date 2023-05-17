@@ -1,8 +1,8 @@
-import { defineStore } from 'pinia'
-import { useSettingStore } from './setting-store';
+import { defineStore } from "pinia";
+import { useSettingStore } from "./setting-store";
 import ViolationService from "src/services/ViolationService";
 
-export const useViolationStore = defineStore('violation', {
+export const useViolationStore = defineStore("violation", {
   state: () => {
     return {
       recent: [],
@@ -13,7 +13,7 @@ export const useViolationStore = defineStore('violation', {
         guard: {},
       },
       settingStore: useSettingStore(),
-    }
+    };
   },
 
   getters: {
@@ -22,8 +22,12 @@ export const useViolationStore = defineStore('violation', {
       if (!state.stats.courseYear.year) return undefined;
       let values = {};
       state.stats.courseYear[state.settingStore.scope]
-        .filter(item => item.studentYear === '1st' && item.violationIsMajor === 0)
-        .forEach(item => values[item['studentCourse']] = item.violationCount)
+        .filter(
+          (item) => item.studentYear === "1st" && item.violationIsMajor === 0
+        )
+        .forEach(
+          (item) => (values[item["studentCourse"]] = item.violationCount)
+        );
 
       return values;
     },
@@ -31,8 +35,12 @@ export const useViolationStore = defineStore('violation', {
       if (!state.stats.courseYear.year) return undefined;
       let values = {};
       state.stats.courseYear[state.settingStore.scope]
-        .filter(item => item.studentYear === '1st' && item.violationIsMajor === 1)
-        .forEach(item => values[item['studentCourse']] = item.violationCount)
+        .filter(
+          (item) => item.studentYear === "1st" && item.violationIsMajor === 1
+        )
+        .forEach(
+          (item) => (values[item["studentCourse"]] = item.violationCount)
+        );
 
       return values;
     },
@@ -40,8 +48,12 @@ export const useViolationStore = defineStore('violation', {
       if (!state.stats.courseYear.year) return undefined;
       let values = {};
       state.stats.courseYear[state.settingStore.scope]
-        .filter(item => item.studentYear === '2nd' && item.violationIsMajor === 0)
-        .forEach(item => values[item['studentCourse']] = item.violationCount)
+        .filter(
+          (item) => item.studentYear === "2nd" && item.violationIsMajor === 0
+        )
+        .forEach(
+          (item) => (values[item["studentCourse"]] = item.violationCount)
+        );
 
       return values;
     },
@@ -49,8 +61,12 @@ export const useViolationStore = defineStore('violation', {
       if (!state.stats.courseYear.year) return undefined;
       let values = {};
       state.stats.courseYear[state.settingStore.scope]
-        .filter(item => item.studentYear === '2nd' && item.violationIsMajor === 1)
-        .forEach(item => values[item['studentCourse']] = item.violationCount)
+        .filter(
+          (item) => item.studentYear === "2nd" && item.violationIsMajor === 1
+        )
+        .forEach(
+          (item) => (values[item["studentCourse"]] = item.violationCount)
+        );
 
       return values;
     },
@@ -58,8 +74,12 @@ export const useViolationStore = defineStore('violation', {
       if (!state.stats.courseYear.year) return undefined;
       let values = {};
       state.stats.courseYear[state.settingStore.scope]
-        .filter(item => item.studentYear === '3rd' && item.violationIsMajor === 0)
-        .forEach(item => values[item['studentCourse']] = item.violationCount)
+        .filter(
+          (item) => item.studentYear === "3rd" && item.violationIsMajor === 0
+        )
+        .forEach(
+          (item) => (values[item["studentCourse"]] = item.violationCount)
+        );
 
       return values;
     },
@@ -67,8 +87,12 @@ export const useViolationStore = defineStore('violation', {
       if (!state.stats.courseYear.year) return undefined;
       let values = {};
       state.stats.courseYear[state.settingStore.scope]
-        .filter(item => item.studentYear === '3rd' && item.violationIsMajor === 1)
-        .forEach(item => values[item['studentCourse']] = item.violationCount)
+        .filter(
+          (item) => item.studentYear === "3rd" && item.violationIsMajor === 1
+        )
+        .forEach(
+          (item) => (values[item["studentCourse"]] = item.violationCount)
+        );
 
       return values;
     },
@@ -76,8 +100,12 @@ export const useViolationStore = defineStore('violation', {
       if (!state.stats.courseYear.year) return undefined;
       let values = {};
       state.stats.courseYear[state.settingStore.scope]
-        .filter(item => item.studentYear === '4th' && item.violationIsMajor === 0)
-        .forEach(item => values[item['studentCourse']] = item.violationCount)
+        .filter(
+          (item) => item.studentYear === "4th" && item.violationIsMajor === 0
+        )
+        .forEach(
+          (item) => (values[item["studentCourse"]] = item.violationCount)
+        );
 
       return values;
     },
@@ -85,8 +113,12 @@ export const useViolationStore = defineStore('violation', {
       if (!state.stats.courseYear.year) return undefined;
       let values = {};
       state.stats.courseYear[state.settingStore.scope]
-        .filter(item => item.studentYear === '4th' && item.violationIsMajor === 1)
-        .forEach(item => values[item['studentCourse']] = item.violationCount)
+        .filter(
+          (item) => item.studentYear === "4th" && item.violationIsMajor === 1
+        )
+        .forEach(
+          (item) => (values[item["studentCourse"]] = item.violationCount)
+        );
 
       return values;
     },
@@ -105,21 +137,24 @@ export const useViolationStore = defineStore('violation', {
       // });
       // return data
 
-      return state.stats.time[state.settingStore.scope]
-        .map(item => item.violationCount);
+      return state.stats.time[state.settingStore.scope].map(
+        (item) => item.violationCount
+      );
     },
     getGuardStats: (state) => {
       if (!state.stats.guard.year) return null;
 
-      return state.stats.guard[state.settingStore.scope]
-        .map(violation => violation.violationCount)
+      return state.stats.guard[state.settingStore.scope].map(
+        (violation) => violation.violationCount
+      );
     },
     getGuardStatLabels: (state) => {
       if (!state.stats.guard.year) return null;
 
-      return state.stats.guard[state.settingStore.scope]
-        .map(violation => violation.violationGuard)
-    }
+      return state.stats.guard[state.settingStore.scope].map(
+        (violation) => violation.violationGuard
+      );
+    },
   },
 
   actions: {
@@ -138,5 +173,5 @@ export const useViolationStore = defineStore('violation', {
     async requestGuardStats() {
       this.stats.guard = await ViolationService.getGuardStats();
     },
-  }
-})
+  },
+});

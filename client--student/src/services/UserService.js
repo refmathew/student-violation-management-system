@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const url = process.env.DATA_SERVER
+const url = process.env.DATA_SERVER;
 
 class UserService {
   static async recordViolation(lastName, studentId, violation, guard) {
@@ -8,13 +8,13 @@ class UserService {
       studentId: studentId,
       lastName: lastName,
       violation: violation,
-      guard: guard
-    }
+      guard: guard,
+    };
 
     try {
-      return axios.post(`${url}/record-violation`, reqBody)
+      return axios.post(`${url}/record-violation`, reqBody);
     } catch (err) {
-      return err
+      return err;
     }
   }
 
@@ -24,15 +24,15 @@ class UserService {
       lastName: lastName,
       firstName: firstName,
       course: course,
-      year: year
+      year: year,
     };
 
     try {
-      return axios.post(`${url}/register`, reqBody)
+      return axios.post(`${url}/register`, reqBody);
     } catch (err) {
-      return err
+      return err;
     }
   }
 }
 
-export default UserService
+export default UserService;

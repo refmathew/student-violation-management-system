@@ -13,11 +13,11 @@ const props = defineProps({
   header: String,
   subHeader: String,
   body: String,
-})
+});
 </script>
 
 <style scoped lang="sass">
-.overlay 
+.overlay
   &__wrapper
     position: absolute
     top: 0

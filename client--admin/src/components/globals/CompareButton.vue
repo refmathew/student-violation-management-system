@@ -1,40 +1,47 @@
 <template>
   <fieldset class="compare-buttons__container">
-    <span class="compare-buttons__title">
-      Compare:
-    </span>
-    <q-checkbox class="compare-buttons__checkbox" v-model="lastYear" label="Last year" color="deep-purple-4" />
-    <q-checkbox class="compare-buttons__checkbox" v-model="allTime" label="All time" color="deep-purple-4" />
+    <span class="compare-buttons__title"> Compare: </span>
+    <q-checkbox
+      class="compare-buttons__checkbox"
+      v-model="lastYear"
+      label="Last year"
+      color="deep-purple-4"
+    />
+    <q-checkbox
+      class="compare-buttons__checkbox"
+      v-model="allTime"
+      label="All time"
+      color="deep-purple-4"
+    />
   </fieldset>
 </template>
 
 <script>
-import { useSettingStore } from 'src/stores/setting-store';
+import { useSettingStore } from "src/stores/setting-store";
 
 export default {
   data() {
     return {
-      radioButtonValue: '',
+      radioButtonValue: "",
       settingStore: useSettingStore(),
-      scopes: ['week', 'month', 'year'],
+      scopes: ["week", "month", "year"],
       lastYear: false,
       allTime: false,
-    }
+    };
   },
   watch: {
     lastYear(upd, old) {
-      this.settingStore.$patch({ compareWith: { lastYear: upd } })
+      this.settingStore.$patch({ compareWith: { lastYear: upd } });
     },
     allTime(upd, old) {
-      this.settingStore.$patch({ compareWith: { allTime: upd } })
-    }
-  }
-}
+      this.settingStore.$patch({ compareWith: { allTime: upd } });
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
 .compare-buttons {
-
   &__container {
     display: flex;
     align-items: center;

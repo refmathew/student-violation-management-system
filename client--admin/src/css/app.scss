@@ -2,8 +2,8 @@
 
 @use "base";
 
-* { 
-  font-family: 'Poppins';
+* {
+  font-family: "Poppins";
 }
 
 .q-page {
@@ -28,12 +28,12 @@
   }
 }
 
-.q-checkbox { 
+.q-checkbox {
   font-size: 1.2rem !important;
   font-weight: 600;
   color: $primary-2;
 
-  & .q-checkbox__label { 
+  & .q-checkbox__label {
     display: block !important;
     white-space: nowrap !important;
   }

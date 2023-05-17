@@ -1,14 +1,14 @@
 <template>
   <div class="logo" :class="{ 'logo--active': showLetters }">
-    <img src="../assets/logo.svg" alt="">
+    <img src="../assets/logo.svg" alt="" />
     <p class="logo__name" :class="{ 'logo__name--shown': showLetters }">SVMS</p>
   </div>
 </template>
 
 <script setup>
 const props = defineProps({
-  showLetters: Boolean
-})
+  showLetters: Boolean,
+});
 </script>
 
 <style lang="scss" scoped>
@@ -16,11 +16,11 @@ const props = defineProps({
   width: 100%;
   display: flex;
   align-items: center;
-  gap: .4rem;
+  gap: 0.4rem;
   padding-left: 3.2rem;
   font-size: 3.2rem;
   font-weight: 600;
-  letter-spacing: -.4rem;
+  letter-spacing: -0.4rem;
   transition: 300ms 100ms padding-left ease-out;
 
   &--active {

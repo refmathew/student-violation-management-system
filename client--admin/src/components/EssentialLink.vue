@@ -1,7 +1,7 @@
 <template>
   <q-item clickable tag="a">
     <q-item-section v-if="icon" avatar>
-      <img src="assets/Icon=Home.svg" alt="">
+      <img src="assets/Icon=Home.svg" alt="" />
     </q-item-section>
 
     <q-item-section>
@@ -11,25 +11,25 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'EssentialLink',
+  name: "EssentialLink",
   props: {
     title: {
       type: String,
-      required: true
+      required: true,
     },
 
     link: {
       type: String,
-      default: '#'
+      default: "#",
     },
 
     icon: {
       type: String,
-      default: ''
-    }
-  }
-})
+      default: "",
+    },
+  },
+});
 </script>

@@ -1,77 +1,102 @@
 <template>
   <div class="drawer-container">
-    <div class="drawer" :class="{ 'drawer--open': isHovered }" @mouseover="handleMouseOver" @mouseout="handleMouseOut">
+    <div
+      class="drawer"
+      :class="{ 'drawer--open': isHovered }"
+      @mouseover="handleMouseOver"
+      @mouseout="handleMouseOut"
+    >
       <app-logo :showLetters="isHovered" />
       <div class="drawer__gen">
-        <drawer-button v-for="( button, index ) in drawerGenButtons" :key="index" :title="button.title"
-          :icon="button.icon" :link="button.link" :showTitle="isHovered" />
+        <drawer-button
+          v-for="(button, index) in drawerGenButtons"
+          :key="index"
+          :title="button.title"
+          :icon="button.icon"
+          :link="button.link"
+          :showTitle="isHovered"
+        />
       </div>
       <div class="drawer__stats">
-        <drawer-button v-for="( button, index ) in drawerStatButtons" :key="index" :title="button.title"
-          :icon="button.icon" :link="button.link" :showTitle="isHovered" />
+        <drawer-button
+          v-for="(button, index) in drawerStatButtons"
+          :key="index"
+          :title="button.title"
+          :icon="button.icon"
+          :link="button.link"
+          :showTitle="isHovered"
+        />
       </div>
-      <drawer-button title="Settings" icon="settings" link="/settings" :showTitle="isHovered" />
+      <drawer-button
+        title="Settings"
+        icon="settings"
+        link="/settings"
+        :showTitle="isHovered"
+      />
+      <div></div>
       <div>
-      </div>
-      <div>
-        <drawer-button title="Sign out" icon="signout" link="/login" :showTitle="isHovered" />
+        <drawer-button
+          title="Sign out"
+          icon="signout"
+          link="/login"
+          :showTitle="isHovered"
+        />
       </div>
     </div>
   </div>
-
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from "vue";
 import AppLogo from "components/AppLogo.vue";
 import DrawerButton from "components/DrawerButton.vue";
 
 const drawerGenButtons = [
   {
-    title: 'Home',
-    icon: 'home',
-    link: '/'
+    title: "Home",
+    icon: "home",
+    link: "/",
   },
   {
-    title: 'Find student',
-    icon: 'find',
-    link: '/find'
+    title: "Find student",
+    icon: "find",
+    link: "/find",
   },
-]
+];
 
 const drawerStatButtons = [
   {
-    title: 'Violation',
-    icon: 'violation',
-    link: '/stats/violation'
+    title: "Violation",
+    icon: "violation",
+    link: "/stats/violation",
   },
   {
-    title: 'Course & Year',
-    icon: 'courseAndYear',
-    link: '/stats/course-and-year'
+    title: "Course & Year",
+    icon: "courseAndYear",
+    link: "/stats/course-and-year",
   },
   {
-    title: 'Time of the Day',
-    icon: 'timeAndDate',
-    link: '/stats/time-and-date'
+    title: "Time of the Day",
+    icon: "timeAndDate",
+    link: "/stats/time-and-date",
   },
   {
-    title: 'Guard',
-    icon: 'guard',
-    link: '/stats/guard'
+    title: "Guard",
+    icon: "guard",
+    link: "/stats/guard",
   },
-]
+];
 
-const emit = defineEmits(['hoverDrawer'])
+const emit = defineEmits(["hoverDrawer"]);
 const handleMouseOver = () => {
   isHovered.value = true;
-  emit('hoverDrawer', isHovered);
-}
+  emit("hoverDrawer", isHovered);
+};
 
 const handleMouseOut = () => {
   isHovered.value = false;
-  emit('hoverDrawer', isHovered);
-}
+  emit("hoverDrawer", isHovered);
+};
 
 const isHovered = ref(false);
 </script>
@@ -89,7 +114,7 @@ const isHovered = ref(false);
   width: 9.6rem;
   padding: 3.2rem 0;
   overflow-x: hidden;
-  box-shadow: 0 .4rem .8rem .2rem rgba($primary-1, .32);
+  box-shadow: 0 0.4rem 0.8rem 0.2rem rgba($primary-1, 0.32);
   border-radius: 1.6rem;
   background-color: $primary-1;
   color: $secondary-1;
@@ -102,6 +127,5 @@ const isHovered = ref(false);
   &--open {
     width: 21.5rem;
   }
-
 }
 </style>

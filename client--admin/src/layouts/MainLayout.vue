@@ -1,23 +1,43 @@
 <template>
   <q-layout>
     <layout-drawer @hoverDrawer="handleHoverDrawer" />
-    <div class="drawer-dummy" :class="{ 'drawer-dummy--active': drawerActive }"></div>
+    <div
+      class="drawer-dummy"
+      :class="{ 'drawer-dummy--active': drawerActive }"
+    ></div>
     <div class="layout--main__main">
       <div class="layout--main__header">
         <div class="layout--main__title">
           <!-- Title -->
-          <span class="layout--main__main-title" v-if="route.meta.title">{{ route.meta.title }}</span>
+          <span class="layout--main__main-title" v-if="route.meta.title">{{
+            route.meta.title
+          }}</span>
           <span class="layout--main__main-title" v-else>Statistics</span>
           <!-- Subtitle -->
-          <span class="layout--main__sub-title" v-if="route.meta.title === 'Home'">Welcome back, {{ userFirstName
+          <span
+            class="layout--main__sub-title"
+            v-if="route.meta.title === 'Home'"
+            >Welcome back, {{ userFirstName }}</span
+          >
+          <span
+            class="layout--main__sub-title"
+            v-else-if="route.meta.title === 'Find student'"
+            >Query student data</span
+          >
+          <span
+            class="layout--main__sub-title"
+            v-else-if="route.meta.title === 'Filter violations'"
+            >Specify violation queries</span
+          >
+          <span class="layout--main__sub-title" v-else>{{
+            route.meta.subTitle
           }}</span>
-          <span class="layout--main__sub-title" v-else-if="route.meta.title === 'Find student'">Query student
-            data</span>
-          <span class="layout--main__sub-title" v-else-if="route.meta.title === 'Filter violations'">Specify violation
-            queries</span>
-          <span class="layout--main__sub-title" v-else>{{ route.meta.subTitle }}</span>
         </div>
-        <logout-button :first-name="userFirstName" :last-name="userLastName" icon="student" />
+        <logout-button
+          :first-name="userFirstName"
+          :last-name="userLastName"
+          icon="student"
+        />
       </div>
       <q-page-container>
         <router-view />
@@ -29,27 +49,27 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router';
-import { useUserStore } from 'src/stores/user-store';
-import LayoutDrawer from '../components/LayoutDrawer.vue'
-import SettingDrawer from 'src/components/globals/SettingDrawer.vue';
-import LogoutButton from 'src/components/LogoutButton.vue';
-import DownloadButton from 'src/components/layouts/stats/DownloadButton.vue';
+import { ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useUserStore } from "src/stores/user-store";
+import LayoutDrawer from "../components/LayoutDrawer.vue";
+import SettingDrawer from "src/components/globals/SettingDrawer.vue";
+import LogoutButton from "src/components/LogoutButton.vue";
+import DownloadButton from "src/components/layouts/stats/DownloadButton.vue";
 
 const router = useRouter();
 const userStore = useUserStore();
 // if (Object.keys(userStore.user).length === 0) router.push('/login')
 
-const userLastName = ref('dela Cruz');
-const userFirstName = ref('John');
+const userLastName = ref("dela Cruz");
+const userFirstName = ref("John");
 
 const route = useRoute();
 
 const drawerActive = ref(false);
 const handleHoverDrawer = (e) => {
   drawerActive.value = e.value;
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -104,4 +124,3 @@ const handleHoverDrawer = (e) => {
   }
 }
 </style>
-

@@ -1,38 +1,66 @@
 <template>
   <q-page class="page__main">
     <form class="page__form" ref="$form" @submit="handleSubmit">
-      <CustomInput name="lastName" type="text" placeholder="Last name" iconName="student"
-        validationCriteria="^[a-zA-Z]+$" @validate-input="checkValidity" />
-      <CustomInput name="studentId" type="password" placeholder="Student Id (Include dash. Ex: 18-00829)"
-        iconName="studentId" validationCriteria="^\d\d-\d\d\d\d\d$" validationErrorMessage="Please check input format"
-        @validate-input="checkValidity" />
-      <q-select class="page__select-input" filled v-model="violation" use-input input-debounce="0" label="Violation"
-        :options="violationList" @filter="violationFilter">
+      <CustomInput
+        name="lastName"
+        type="text"
+        placeholder="Last name"
+        iconName="student"
+        validationCriteria="^[a-zA-Z]+$"
+        @validate-input="checkValidity"
+      />
+      <CustomInput
+        name="studentId"
+        type="password"
+        placeholder="Student Id (Include dash. Ex: 18-00829)"
+        iconName="studentId"
+        validationCriteria="^\d\d-\d\d\d\d\d$"
+        validationErrorMessage="Please check input format"
+        @validate-input="checkValidity"
+      />
+      <q-select
+        class="page__select-input"
+        filled
+        v-model="violation"
+        use-input
+        input-debounce="0"
+        label="Violation"
+        :options="violationList"
+        @filter="violationFilter"
+      >
         <template v-slot:prepend>
           <q-icon name="error" style="color: #8b86bd" />
         </template>
         <template v-slot:no-option>
           <q-item>
-            <q-item-section class=" text-grey">
-              No results
-            </q-item-section>
+            <q-item-section class="text-grey"> No results </q-item-section>
           </q-item>
         </template>
       </q-select>
-      <q-select class="page__select-input" filled v-model="guard" use-input input-debounce="0" label="Guard on Duty"
-        :options="guardList" @filter="filterFn">
+      <q-select
+        class="page__select-input"
+        filled
+        v-model="guard"
+        use-input
+        input-debounce="0"
+        label="Guard on Duty"
+        :options="guardList"
+        @filter="filterFn"
+      >
         <template v-slot:prepend>
           <q-icon name="shield" style="color: #8b86bd" />
         </template>
         <template v-slot:no-option>
           <q-item>
-            <q-item-section class="text-grey">
-              No results
-            </q-item-section>
+            <q-item-section class="text-grey"> No results </q-item-section>
           </q-item>
         </template>
       </q-select>
-      <CustomButton @click="handleSubmit" text="Submit" class="page__form-button" />
+      <CustomButton
+        @click="handleSubmit"
+        text="Submit"
+        class="page__form-button"
+      />
     </form>
     <p class="page__footer">
       First time user?
@@ -46,7 +74,7 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useQuasar } from "quasar";
-import UserService from "../services/UserService"
+import UserService from "../services/UserService";
 import CustomInput from "src/components/input/CustomInput.vue";
 import CustomButton from "src/components/CustomButton.vue";
 import AppService from "src/services/AppService";
@@ -56,20 +84,20 @@ const guard = ref(null);
 const guardList = ref([]);
 const getGuardList = async () => {
   let response = await AppService.getGuardList();
-  guardList.value = response.data.data.map(data => {
-    return data.name
-  })
-}
+  guardList.value = response.data.data.map((data) => {
+    return data.name;
+  });
+};
 getGuardList();
 
 const violation = ref(null);
 const violationList = ref([]);
 const getViolationList = async () => {
   let response = await AppService.getViolationList();
-  violationList.value = response.data.data.map(data => {
-    return data.violation
-  })
-}
+  violationList.value = response.data.data.map((data) => {
+    return data.violation;
+  });
+};
 getViolationList();
 
 // =========================================================================== >
@@ -77,13 +105,13 @@ getViolationList();
 const inputs = reactive({
   studentId: {
     inputValue: undefined,
-    isValid: false
+    isValid: false,
   },
   lastName: {
     inputValue: undefined,
-    isValid: false
+    isValid: false,
   },
-})
+});
 
 // =========================================================================== >
 
@@ -100,18 +128,18 @@ const handleSubmit = () => {
       areAllValid = false;
     }
   }
-  if (!guard.value) areAllValid = false
-  if (!violation.value) areAllValid = false
+  if (!guard.value) areAllValid = false;
+  if (!violation.value) areAllValid = false;
 
   if (!areAllValid) {
     $q.notify({
-      message: 'Please complete required fields',
-      color: 'warning',
-      textColor: 'secondary',
-      icon: 'warning',
-      badgeColor: 'warning',
-      badgeTextColor: 'secondary'
-    })
+      message: "Please complete required fields",
+      color: "warning",
+      textColor: "secondary",
+      icon: "warning",
+      badgeColor: "warning",
+      badgeTextColor: "secondary",
+    });
   } else {
     recordViolation(
       inputs.lastName.inputValue,
@@ -120,43 +148,58 @@ const handleSubmit = () => {
       guard.value
     );
   }
-}
+};
 
-const recordViolation = async (lastName, studentId, violationType, guardOnDuty) => {
+const recordViolation = async (
+  lastName,
+  studentId,
+  violationType,
+  guardOnDuty
+) => {
   const notif = $q.notify({
-    message: 'Recording...',
-    color: 'accent',
-    textColor: 'secondary',
+    message: "Recording...",
+    color: "accent",
+    textColor: "secondary",
     group: false,
     timeout: 0,
     spinner: true,
-  })
+  });
 
   try {
-    const response = await UserService.recordViolation(lastName, studentId, violationType, guardOnDuty)
+    const response = await UserService.recordViolation(
+      lastName,
+      studentId,
+      violationType,
+      guardOnDuty
+    );
     notif({
       message: response.data.message,
-      color: 'accent',
-      textColor: 'secondary',
+      color: "accent",
+      textColor: "secondary",
       timeout: 4000,
       spinner: false,
-      icon: 'done',
-    })
+      icon: "done",
+    });
   } catch (error) {
     notif({
-      message: 'Error',
+      message: "Error",
       caption: error.response.data.message,
-      color: 'warning',
-      textColor: 'secondary',
+      color: "warning",
+      textColor: "secondary",
       timeout: 12000,
       spinner: false,
-      icon: 'warning',
+      icon: "warning",
       actions: [
-        { label: 'Dismiss', color: 'primary', textColor: 'secondary', handler: () => { } }
-      ]
-    })
+        {
+          label: "Dismiss",
+          color: "primary",
+          textColor: "secondary",
+          handler: () => {},
+        },
+      ],
+    });
   }
-}
+};
 </script>
 
 <style scoped lang="sass">
@@ -172,12 +215,12 @@ const recordViolation = async (lastName, studentId, violationType, guardOnDuty) 
     width: 38.5rem
     margin: auto
 
-  &__select-input 
+  &__select-input
     width: 100%
     background: $secondary-1
     border-radius: 1.6rem
     overflow: hidden
-    
+
   &__footer
     margin-top: 4.8rem
     font-size: 1.4rem

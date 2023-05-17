@@ -4,8 +4,7 @@
       <div />
       <div />
     </div>
-    <div class="setting-drawer__main">
-    </div>
+    <div class="setting-drawer__main"></div>
   </div>
 </template>
 
@@ -22,13 +21,11 @@ export default {
     // this.settingDrawerWidth = this.$refs.settingDrawer.clientWidth;
     // this.settingDrawerHandleWidth = this.$refs.settingDrawer.firstChild.clientWidth;
     // this.$refs.settingDrawer.style.bottom = `-${this.settingDrawerWidth - this.settingDrawerHandleWidth - 8}px`;
-
     // this.$refs.settingDrawer.childNodes.forEach((child) => {
     // child.addEventListener("mouseover", () => {
     // this.$refs.settingDrawer.style.bottom = 0;
     // });
     // });
-
     // this.$refs.settingDrawer.childNodes.forEach((child) => {
     // child.addEventListener("mouseleave", () => {
     // this.$refs.settingDrawer.style.bottom = `-${this.settingDrawerWidth - this.settingDrawerHandleWidth - 8}px`;
@@ -36,7 +33,7 @@ export default {
     // });
     // })();
   },
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -52,17 +49,17 @@ export default {
   &__handle {
     display: flex;
     flex-direction: column;
-    gap: .2rem;
-    padding: .8rem 1.6rem;
+    gap: 0.2rem;
+    padding: 0.8rem 1.6rem;
     border-radius: 3.2rem 3.2rem 0 0;
     background-color: $secondary-1;
-    box-shadow: 0 .4rem .8rem .2rem rgba($primary-2, .32);
+    box-shadow: 0 0.4rem 0.8rem 0.2rem rgba($primary-2, 0.32);
 
     div {
       width: 3.2rem;
-      height: .2rem;
+      height: 0.2rem;
       background-color: $primary-2;
-      border-radius: .1rem;
+      border-radius: 0.1rem;
     }
   }
 
@@ -75,8 +72,7 @@ export default {
     padding: 1.6rem 25.6rem 1.2rem;
     background-color: $secondary-1;
     border-radius: 3.2rem 3.2rem 0 0;
-    box-shadow: 0 .4rem .8rem .2rem rgba($primary-2, .32);
+    box-shadow: 0 0.4rem 0.8rem 0.2rem rgba($primary-2, 0.32);
   }
-
 }
 </style>

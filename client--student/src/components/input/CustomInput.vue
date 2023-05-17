@@ -2,56 +2,114 @@
   <div class="custom-input__wrapper">
     <div class="custom-input__g1">
       <div class="custom-input-main__wrapper">
-        <div class="custom-input-main__icon-wrapper" :class="{
-          'custom-input-main__icon-wrapper--active': inputActive,
-          'custom-input-main__icon-wrapper--inactive': !inputActive,
-        }" v-html="inputIcons[props.iconName].icon" ref="$icon"></div>
-        <input class="custom-input-main__input" :class="{ 'custom-input__input--select': props.type === 'select' }"
-          :placeholder="props.placeholder" :type="props.type === 'select' ? 'text' : props.type" ref="$input" />
-        <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg"
-          class="custom-input-main__dropdown" :class="{ 'custom-input-main__dropdown--active': selectActive }"
-          v-if="props.type === 'select'" ref="$dropdown">
+        <div
+          class="custom-input-main__icon-wrapper"
+          :class="{
+            'custom-input-main__icon-wrapper--active': inputActive,
+            'custom-input-main__icon-wrapper--inactive': !inputActive,
+          }"
+          v-html="inputIcons[props.iconName].icon"
+          ref="$icon"
+        ></div>
+        <input
+          class="custom-input-main__input"
+          :class="{ 'custom-input__input--select': props.type === 'select' }"
+          :placeholder="props.placeholder"
+          :type="props.type === 'select' ? 'text' : props.type"
+          ref="$input"
+        />
+        <svg
+          width="16"
+          height="17"
+          viewBox="0 0 16 17"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="custom-input-main__dropdown"
+          :class="{ 'custom-input-main__dropdown--active': selectActive }"
+          v-if="props.type === 'select'"
+          ref="$dropdown"
+        >
           <path
             d="M8.66655 10.8539C8.12755 11.2735 7.8612 11.2702 7.3332 10.8481L1.49825 6.70767C1.00158 6.31049 0.999967 5.83331 1.99986 5.83331H14C15 5.83331 15.0043 6.3161 14.4939 6.71356L8.66655 10.8539Z"
-            fill="#8B86BD" />
+            fill="#8B86BD"
+          />
         </svg>
       </div>
-      <p class="custom-input__invalid" :class="{ 'custom-input__invalid--active': valErrMesActive === true }"
-        v-if="props.type === 'select'">
+      <p
+        class="custom-input__invalid"
+        :class="{ 'custom-input__invalid--active': valErrMesActive === true }"
+        v-if="props.type === 'select'"
+      >
         <span>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <path
               d="M11.0003 8.99999C11.0003 8.73478 11.1056 8.48042 11.2932 8.29289C11.4807 8.10535 11.7351 7.99999 12.0003 7.99999C12.2655 7.99999 12.5198 8.10535 12.7074 8.29289C12.8949 8.48042 13.0003 8.73478 13.0003 8.99999V11C13.0003 11.2652 12.8949 11.5196 12.7074 11.7071C12.5198 11.8946 12.2655 12 12.0003 12C11.7351 12 11.4807 11.8946 11.2932 11.7071C11.1056 11.5196 11.0003 11.2652 11.0003 11V8.99999ZM12.0003 13.5C11.6024 13.5 11.2209 13.658 10.9396 13.9393C10.6583 14.2206 10.5003 14.6022 10.5003 15C10.5003 15.3978 10.6583 15.7793 10.9396 16.0607C11.2209 16.342 11.6024 16.5 12.0003 16.5C12.3981 16.5 12.7796 16.342 13.0609 16.0607C13.3422 15.7793 13.5003 15.3978 13.5003 15C13.5003 14.6022 13.3422 14.2206 13.0609 13.9393C12.7796 13.658 12.3981 13.5 12.0003 13.5ZM10.4283 2.91799C10.5857 2.63968 10.8141 2.40815 11.0903 2.24705C11.3665 2.08595 11.6805 2.00107 12.0003 2.00107C12.32 2.00107 12.634 2.08595 12.9102 2.24705C13.1864 2.40815 13.4149 2.63968 13.5723 2.91799L21.7563 17.256C22.4523 18.476 21.5783 20 20.1823 20H3.82027C2.42427 20 1.55027 18.476 2.24627 17.256L10.4303 2.91599L10.4283 2.91799ZM12.0003 4.23799L4.16627 17.966H19.8343L12.0003 4.23799Z"
-              fill="black" />
+              fill="black"
+            />
           </svg>
         </span>
         Select only from the given options
       </p>
-      <p class="custom-input__invalid" :class="{ 'custom-input__invalid--active': valErrMesActive }"
-        v-else-if="props.validationErrorMessage">
+      <p
+        class="custom-input__invalid"
+        :class="{ 'custom-input__invalid--active': valErrMesActive }"
+        v-else-if="props.validationErrorMessage"
+      >
         <span>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <path
               d="M11.0003 8.99999C11.0003 8.73478 11.1056 8.48042 11.2932 8.29289C11.4807 8.10535 11.7351 7.99999 12.0003 7.99999C12.2655 7.99999 12.5198 8.10535 12.7074 8.29289C12.8949 8.48042 13.0003 8.73478 13.0003 8.99999V11C13.0003 11.2652 12.8949 11.5196 12.7074 11.7071C12.5198 11.8946 12.2655 12 12.0003 12C11.7351 12 11.4807 11.8946 11.2932 11.7071C11.1056 11.5196 11.0003 11.2652 11.0003 11V8.99999ZM12.0003 13.5C11.6024 13.5 11.2209 13.658 10.9396 13.9393C10.6583 14.2206 10.5003 14.6022 10.5003 15C10.5003 15.3978 10.6583 15.7793 10.9396 16.0607C11.2209 16.342 11.6024 16.5 12.0003 16.5C12.3981 16.5 12.7796 16.342 13.0609 16.0607C13.3422 15.7793 13.5003 15.3978 13.5003 15C13.5003 14.6022 13.3422 14.2206 13.0609 13.9393C12.7796 13.658 12.3981 13.5 12.0003 13.5ZM10.4283 2.91799C10.5857 2.63968 10.8141 2.40815 11.0903 2.24705C11.3665 2.08595 11.6805 2.00107 12.0003 2.00107C12.32 2.00107 12.634 2.08595 12.9102 2.24705C13.1864 2.40815 13.4149 2.63968 13.5723 2.91799L21.7563 17.256C22.4523 18.476 21.5783 20 20.1823 20H3.82027C2.42427 20 1.55027 18.476 2.24627 17.256L10.4303 2.91599L10.4283 2.91799ZM12.0003 4.23799L4.16627 17.966H19.8343L12.0003 4.23799Z"
-              fill="black" />
+              fill="black"
+            />
           </svg>
         </span>
         {{ props.validationErrorMessage }}
       </p>
-      <p class="custom-input__invalid" :class="{ 'custom-input__invalid--active': valErrMesActive }" v-else>
+      <p
+        class="custom-input__invalid"
+        :class="{ 'custom-input__invalid--active': valErrMesActive }"
+        v-else
+      >
         <span>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <path
               d="M11.0003 8.99999C11.0003 8.73478 11.1056 8.48042 11.2932 8.29289C11.4807 8.10535 11.7351 7.99999 12.0003 7.99999C12.2655 7.99999 12.5198 8.10535 12.7074 8.29289C12.8949 8.48042 13.0003 8.73478 13.0003 8.99999V11C13.0003 11.2652 12.8949 11.5196 12.7074 11.7071C12.5198 11.8946 12.2655 12 12.0003 12C11.7351 12 11.4807 11.8946 11.2932 11.7071C11.1056 11.5196 11.0003 11.2652 11.0003 11V8.99999ZM12.0003 13.5C11.6024 13.5 11.2209 13.658 10.9396 13.9393C10.6583 14.2206 10.5003 14.6022 10.5003 15C10.5003 15.3978 10.6583 15.7793 10.9396 16.0607C11.2209 16.342 11.6024 16.5 12.0003 16.5C12.3981 16.5 12.7796 16.342 13.0609 16.0607C13.3422 15.7793 13.5003 15.3978 13.5003 15C13.5003 14.6022 13.3422 14.2206 13.0609 13.9393C12.7796 13.658 12.3981 13.5 12.0003 13.5ZM10.4283 2.91799C10.5857 2.63968 10.8141 2.40815 11.0903 2.24705C11.3665 2.08595 11.6805 2.00107 12.0003 2.00107C12.32 2.00107 12.634 2.08595 12.9102 2.24705C13.1864 2.40815 13.4149 2.63968 13.5723 2.91799L21.7563 17.256C22.4523 18.476 21.5783 20 20.1823 20H3.82027C2.42427 20 1.55027 18.476 2.24627 17.256L10.4303 2.91599L10.4283 2.91799ZM12.0003 4.23799L4.16627 17.966H19.8343L12.0003 4.23799Z"
-              fill="black" />
+              fill="black"
+            />
           </svg>
         </span>
         Invalid input
       </p>
     </div>
-    <ul class="custom-input-options__wrapper" :class="{ 'custom-input-options__wrapper--active': selectActive }"
-      v-if="props.type === 'select'" ref="$optionsWrapper">
-      <li class="custom-input-options__option" v-for="(option, key) of props.selectOptions" :key="key">
+    <ul
+      class="custom-input-options__wrapper"
+      :class="{ 'custom-input-options__wrapper--active': selectActive }"
+      v-if="props.type === 'select'"
+      ref="$optionsWrapper"
+    >
+      <li
+        class="custom-input-options__option"
+        v-for="(option, key) of props.selectOptions"
+        :key="key"
+      >
         {{ option }}
       </li>
     </ul>
@@ -265,7 +323,9 @@ const input = ref({
 });
 
 watch(valErrMesActive, (newValErrMesActive) => {
-  newValErrMesActive ? (input.value.isValueValid = false) : (input.value.isValueValid = true);
+  newValErrMesActive
+    ? (input.value.isValueValid = false)
+    : (input.value.isValueValid = true);
 });
 
 onMounted(() => {
@@ -275,7 +335,6 @@ onMounted(() => {
   });
 
   if (props.type === "select") {
-
     const $options = $optionsWrapper.value.querySelectorAll(
       ".custom-input-options__option"
     );
@@ -291,7 +350,7 @@ onMounted(() => {
             selectOption.toLowerCase() ===
             $input.value.value.toLowerCase().trim()
           ) {
-            return hasMatch = true;
+            return (hasMatch = true);
           }
         });
 
@@ -328,7 +387,7 @@ const validate = () => {
 const emitInput = () => {
   input.value.value = $input.value.value;
   emit("validateInput", { ...input.value });
-}
+};
 </script>
 
 <style lang="sass">

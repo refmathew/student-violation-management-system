@@ -5,17 +5,17 @@ html {
 
 body {
   font-size: 1.6rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   background-color: #f2f2fd;
 }
 
 ::-webkit-scrollbar {
-  width: .8rem;
-  height: .8rem;
+  width: 0.8rem;
+  height: 0.8rem;
 }
 
 ::-webkit-scrollbar-thumb {
-  border-radius: .3rem;
+  border-radius: 0.3rem;
   background-color: #8b86bd;
 
   &:hover {

@@ -35,7 +35,7 @@ module.exports = configure(function (/* ctx */) {
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
       // 'ionicons-v4',
-      'mdi-v5',
+      "mdi-v5",
       // 'fontawesome-v6',
       // 'eva-icons',
       // 'themify',
@@ -53,7 +53,7 @@ module.exports = configure(function (/* ctx */) {
         node: "node16",
       },
 
-      env: require('dotenv').config().parsed,
+      env: require("dotenv").config().parsed,
 
       vueRouterMode: "hash", // available values: 'hash', 'history'
       // vueRouterBase,
