@@ -1,18 +1,19 @@
-const db = require('../db/connect');
+const db = require("../db/connect");
 let sql;
 
 const getStudentStatsQuery = (scope, query) => {
-  let condition = '';
+  let condition = "";
 
   switch (scope) {
-    case 'thisYear':
-      condition = ' Violations.Timestamp > date("now", "start of year")'
+    case "thisYear":
+      condition = ' Violations.Timestamp > date("now", "start of year")';
       break;
-    case 'lastYear':
-      condition = ' Violations.Timestamp > date("now", "start of year", "-1 years") AND Violations.Timestamp < date("now", "start of year")'
+    case "lastYear":
+      condition =
+        ' Violations.Timestamp > date("now", "start of year", "-1 years") AND Violations.Timestamp < date("now", "start of year")';
       break;
-    case 'allTime':
-      condition = ' Violations.Timestamp < date("now", "start of year")'
+    case "allTime":
+      condition = ' Violations.Timestamp < date("now", "start of year")';
       break;
   }
   return `
@@ -39,49 +40,51 @@ const getStudentStatsQuery = (scope, query) => {
       ORDER BY 
         count 
       DESC;
-  `
-}
+  `;
+};
 
 const getStudentDataThisYear = (req, res, next) => {
-  db.all(getStudentStatsQuery('thisYear', req.query.query), [], (err, rows) => {
-    if (err) return res.status(500).send({ success: false, err: err })
-    res.locals.thisYear = rows
+  db.all(getStudentStatsQuery("thisYear", req.query.query), [], (err, rows) => {
+    if (err) return res.status(500).send({ success: false, err: err });
+    res.locals.thisYear = rows;
     next();
   });
-}
+};
 const getStudentDataLastYear = (req, res, next) => {
-  db.all(getStudentStatsQuery('lastYear', req.query.query), [], (err, rows) => {
-    if (err) return res.status(500).send({ success: false, err: err })
-    res.locals.lastYear = rows
-    next()
+  db.all(getStudentStatsQuery("lastYear", req.query.query), [], (err, rows) => {
+    if (err) return res.status(500).send({ success: false, err: err });
+    res.locals.lastYear = rows;
+    next();
   });
-}
+};
 const getStudentDataAllTime = (req, res, next) => {
-  db.all(getStudentStatsQuery('allTime', req.query.query), [], (err, rows) => {
-    if (err) return res.status(500).send({ success: false, err: err })
-    res.status(200)
-      .send({
-        success: true,
-        data: {
-          data: res.locals.violations,
-          stats: {
-            thisYear: res.locals.thisYear,
-            lastYear: res.locals.lastYear,
-            allTime: rows
-          }
+  db.all(getStudentStatsQuery("allTime", req.query.query), [], (err, rows) => {
+    if (err) return res.status(500).send({ success: false, err: err });
+    res.status(200).send({
+      success: true,
+      data: {
+        data: res.locals.violations,
+        stats: {
+          thisYear: res.locals.thisYear,
+          lastYear: res.locals.lastYear,
+          allTime: rows,
         },
-        hasMultipleStudents: false
-      })
+      },
+      hasMultipleStudents: false,
+    });
   });
-}
+};
 
 const checkQueryValidity = (req, res, next) => {
   const { query } = req.query;
 
-  if (!query) return res.status(400).send({ success: false, message: "Please provide non empty query" });
+  if (!query)
+    return res
+      .status(400)
+      .send({ success: false, message: "Please provide non empty query" });
 
   next();
-}
+};
 
 const findStudent = (req, res, next) => {
   const { query } = req.query;
@@ -110,18 +113,27 @@ const findStudent = (req, res, next) => {
     ORDER BY 
       LastName
     ASC
-  `
+  `;
 
   db.all(sql, [], (err, rows) => {
-    if (err) return res.status(500).send({ success: false, err: err })
+    if (err) return res.status(500).send({ success: false, err: err });
 
-    if (rows.length < 1) return res.status(400).send({ success: false, message: 'No student found matching the query' });
+    if (rows.length < 1)
+      return res
+        .status(400)
+        .send({
+          success: false,
+          message: "No student found matching the query",
+        });
 
-    if (rows.length > 1) return res.status(200).send({ success: true, data: rows, hasMultipleStudents: true })
+    if (rows.length > 1)
+      return res
+        .status(200)
+        .send({ success: true, data: rows, hasMultipleStudents: true });
 
-    next()
+    next();
   });
-}
+};
 
 const getStudentData = async (req, res, next) => {
   const { query } = req.query;
@@ -154,37 +166,46 @@ const getStudentData = async (req, res, next) => {
   `;
 
   db.all(sql, [], (err, rows) => {
-    if (err) return res.status(500).send({ success: false, err: err })
+    if (err) return res.status(500).send({ success: false, err: err });
     res.locals.violations = rows;
-    next()
+    next();
   });
-}
+};
 
 const recordViolation = async (req, res) => {
   const { studentId, violation, guard } = req.body;
-  sql = 'INSERT INTO Violations( StudentId, Violation, Guard ) VALUES(?, ?, ?)';
+  sql = "INSERT INTO Violations( StudentId, Violation, Guard ) VALUES(?, ?, ?)";
 
   db.run(sql, [studentId, violation, guard], (err, rows) => {
     if (err) {
-      res.status(400).send({ err: err })
+      res.status(400).send({ err: err });
     } else {
-      res.status(200).send({ success: true, message: "Violation Recorded" })
+      res.status(200).send({ success: true, message: "Violation Recorded" });
     }
   });
-}
+};
 
 const register = (req, res) => {
   const values = Object.values(req.body);
-  sql = 'INSERT INTO Students( StudentId, LastName, FirstName, Course, Year ) VALUES(?, ?, ?, ?, ?)';
+  sql =
+    "INSERT INTO Students( StudentId, LastName, FirstName, Course, Year ) VALUES(?, ?, ?, ?, ?)";
 
   db.run(sql, values, (err, result) => {
     if (err) {
-      if (err.errno === 19) res.status(400).send({ success: false, message: "Student Id already exists. Please report to the SADDO" })
+      if (err.errno === 19)
+        res
+          .status(400)
+          .send({
+            success: false,
+            message: "Student Id already exists. Please report to the SADDO",
+          });
     } else {
-      res.status(200).send({ success: true, message: "Student succesfully registered" })
+      res
+        .status(200)
+        .send({ success: true, message: "Student succesfully registered" });
     }
-  })
-}
+  });
+};
 
 const getGuardList = (req, res) => {
   sql = `
@@ -192,12 +213,14 @@ const getGuardList = (req, res) => {
       firstname || ' ' || lastname AS name
     FROM 
       Guard;
-  `
+  `;
   db.all(sql, [], (err, rows) => {
-    if (err) return res.status(500).send({ success: false, message: err })
-    res.status(200).send({ success: true, message: "Guard list retrieved", data: rows });
-  })
-}
+    if (err) return res.status(500).send({ success: false, message: err });
+    res
+      .status(200)
+      .send({ success: true, message: "Guard list retrieved", data: rows });
+  });
+};
 
 const getViolationList = (req, res) => {
   sql = `
@@ -205,13 +228,15 @@ const getViolationList = (req, res) => {
       Violation AS violation
     FROM 
       ViolationsDesc;
-  `
+  `;
 
   db.all(sql, [], (err, rows) => {
-    if (err) return res.status(500).send({ success: false, message: err })
-    res.status(200).send({ success: true, message: "Violation list retrieved", data: rows });
-  })
-}
+    if (err) return res.status(500).send({ success: false, message: err });
+    res
+      .status(200)
+      .send({ success: true, message: "Violation list retrieved", data: rows });
+  });
+};
 
 module.exports = {
   checkQueryValidity,

@@ -1,4 +1,4 @@
-const db = require('../db/connect.js');
+const db = require("../db/connect.js");
 
 let sql;
 
@@ -6,13 +6,13 @@ const getViolationStatsLastYearQuery = (range) => {
   let timeAgo;
   let till;
   switch (range) {
-    case 'month':
+    case "month":
       timeAgo = `"start of month", "-1 years"`;
-      till = ` "start of month", "+30 days", "-1 years"`
+      till = ` "start of month", "+30 days", "-1 years"`;
       break;
-    case 'year':
+    case "year":
       timeAgo = `"start of year", "-1 years"`;
-      till = `"start of year"`
+      till = `"start of year"`;
       break;
   }
 
@@ -36,16 +36,16 @@ const getViolationStatsLastYearQuery = (range) => {
     ORDER BY 
       count 
     DESC;
-  `
-}
+  `;
+};
 
 const getViolationStatsAllTimeQuery = (range) => {
   let condition;
   switch (range) {
-    case 'month':
+    case "month":
       condition = `strftime("%m", Violations.Timestamp) == strftime("%m")`;
       break;
-    case 'year':
+    case "year":
       condition = `Violations.Timestamp < date("now", "start of year")`;
       break;
   }
@@ -69,34 +69,34 @@ const getViolationStatsAllTimeQuery = (range) => {
     ORDER BY 
       count 
     DESC;
-  `
-}
+  `;
+};
 
 // =============================================================================== >
 
 const getViolationStatsMonthLastYear = (req, res, next) => {
-  db.all(getViolationStatsLastYearQuery('month'), [], (err, rows) => {
+  db.all(getViolationStatsLastYearQuery("month"), [], (err, rows) => {
     if (err) return console.error(err);
-    res.locals.lastYearMonth = rows
-    next()
-  })
-}
+    res.locals.lastYearMonth = rows;
+    next();
+  });
+};
 const getViolationStatsYearLastYear = (req, res, next) => {
-  db.all(getViolationStatsLastYearQuery('year'), [], (err, rows) => {
+  db.all(getViolationStatsLastYearQuery("year"), [], (err, rows) => {
     if (err) return console.error(err);
-    res.locals.lastYearYear = rows
-    next()
-  })
-}
+    res.locals.lastYearYear = rows;
+    next();
+  });
+};
 const getViolationStatsMonthAllTime = (req, res, next) => {
-  db.all(getViolationStatsAllTimeQuery('month'), [], (err, rows) => {
+  db.all(getViolationStatsAllTimeQuery("month"), [], (err, rows) => {
     if (err) return console.error(err);
-    res.locals.allTimeMonth = rows
-    next()
-  })
-}
+    res.locals.allTimeMonth = rows;
+    next();
+  });
+};
 const getViolationStatsYearAllTime = (req, res, next) => {
-  db.all(getViolationStatsAllTimeQuery('year'), [], (err, rows) => {
+  db.all(getViolationStatsAllTimeQuery("year"), [], (err, rows) => {
     if (err) return console.error(err);
     res.status(200).send({
       success: true,
@@ -112,14 +112,14 @@ const getViolationStatsYearAllTime = (req, res, next) => {
           month: res.locals.allTimeMonth,
           year: rows,
         },
-      }
+      },
     });
-  })
-}
+  });
+};
 
 module.exports = {
   getViolationStatsMonthLastYear,
   getViolationStatsYearLastYear,
   getViolationStatsMonthAllTime,
-  getViolationStatsYearAllTime
-}
+  getViolationStatsYearAllTime,
+};

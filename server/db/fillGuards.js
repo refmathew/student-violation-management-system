@@ -1,4 +1,4 @@
-const db = require('./connect.js');
+const db = require("./connect.js");
 
 const guardList = [
   { firstname: "N/A", lastname: "" },
@@ -9,18 +9,19 @@ const guardList = [
   { firstname: "Mercedita", lastname: "Abalona" },
   { firstname: "Reejay", lastname: "Ortega" },
   { firstname: "Remond", lastname: "Rivera" },
-  { firstname: "Ronaldo", lastname: "Villacruel" }
+  { firstname: "Ronaldo", lastname: "Villacruel" },
 ];
 
 let sql = `INSERT INTO Guard(firstname, lastname) VALUES`;
 let values = guardList.map((guard, index) => {
-  if (index === guardList.length - 1) return ` ('${guard.firstname}', '${guard.lastname}')`
-  return `('${guard.firstname}', '${guard.lastname}')`
-})
-sql += values.join(', ');
+  if (index === guardList.length - 1)
+    return ` ('${guard.firstname}', '${guard.lastname}')`;
+  return `('${guard.firstname}', '${guard.lastname}')`;
+});
+sql += values.join(", ");
 
 db.run(sql, (err) => {
   if (err) {
-    console.log(err)
+    console.log(err);
   }
 });

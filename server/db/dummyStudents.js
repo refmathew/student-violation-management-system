@@ -1,5 +1,5 @@
-const _ = require('lodash');
-const db = require('./connect');
+const _ = require("lodash");
+const db = require("./connect");
 
 const firstNames = [
   "Aiko",
@@ -149,8 +149,8 @@ const firstNames = [
   "Vandolph",
   "Vin",
   "Vic",
-  "Zanjoe"
-]
+  "Zanjoe",
+];
 
 const lastNames = [
   "Abacan",
@@ -313,7 +313,7 @@ const lastNames = [
   "Zabate",
   "Zacarias",
   "Zafra",
-]
+];
 
 const courses = [
   "ABComm",
@@ -327,21 +327,17 @@ const courses = [
   "BSSW",
   "BEED",
   "BSED",
-]
+];
 
-const years = [
-  "1st",
-  "2nd",
-  "3rd",
-  "4th"
-]
+const years = ["1st", "2nd", "3rd", "4th"];
 
 /* storage for studentIds that were already used */
-let studentIds = []
+let studentIds = [];
 
-let studentData = []
+let studentData = [];
 
-let sql = 'INSERT INTO Students (StudentId, Lastname, Firstname, Course, Year) VALUES'
+let sql =
+  "INSERT INTO Students (StudentId, Lastname, Firstname, Course, Year) VALUES";
 
 const getRandomId = () => {
   /* 20x0 */
@@ -350,11 +346,11 @@ const getRandomId = () => {
   let yearOnes;
 
   yearTens = _.random(2);
-  yearTens === 2
-    ? yearOnes = _.random(3)
-    : yearOnes = _.random(9);
+  yearTens === 2 ? (yearOnes = _.random(3)) : (yearOnes = _.random(9));
 
-  const studentId = `${yearTens}${yearOnes}-0${_.random(1)}${_.random(9)}${_.random(9)}${_.random(9)}`;
+  const studentId = `${yearTens}${yearOnes}-0${_.random(1)}${_.random(
+    9
+  )}${_.random(9)}${_.random(9)}`;
 
   /* if the studentId already exists, call the fn again */
   if (studentIds.includes(studentId)) {
@@ -363,8 +359,8 @@ const getRandomId = () => {
 
   studentIds.push(studentId);
 
-  return studentId
-}
+  return studentId;
+};
 
 const getRandomData = () => {
   let studentId = getRandomId();
@@ -375,11 +371,10 @@ const getRandomData = () => {
 
   /* surround data with quotes for sql */
   let randomData = [studentId, lastName, firstName, course, year];
-  randomData = randomData.map(data => `"${data}"`);
+  randomData = randomData.map((data) => `"${data}"`);
 
   return randomData;
-}
-
+};
 
 const amountOfData = 8192;
 
@@ -387,14 +382,14 @@ for (let i = 0; i < amountOfData; i++) {
   let randomData = getRandomData();
 
   if (i === amountOfData - 1) {
-    sql += `(${randomData.join(', ')})`
+    sql += `(${randomData.join(", ")})`;
   } else {
-    sql += `(${randomData.join(', ')}), `
+    sql += `(${randomData.join(", ")}), `;
   }
 }
 
 db.run(sql, (err) => {
   if (err) {
-    console.log(err)
+    console.log(err);
   }
 });

@@ -1,6 +1,6 @@
-const { format } = require('date-fns');
-const _ = require('lodash');
-const db = require('../db/connect.js');
+const { format } = require("date-fns");
+const _ = require("lodash");
+const db = require("../db/connect.js");
 let sql;
 
 const getRecentViolations = (req, res) => {
@@ -30,25 +30,34 @@ const getRecentViolations = (req, res) => {
     if (err) return console.error(err);
 
     const newRows = rows.map((row) => {
-      const { Timestamp: timestamp, StudentId: studentId, FirstName: firstName, LastName: lastName, Violation: violation, Course: course, Year: year, Guard: guard, } = row;
+      const {
+        Timestamp: timestamp,
+        StudentId: studentId,
+        FirstName: firstName,
+        LastName: lastName,
+        Violation: violation,
+        Course: course,
+        Year: year,
+        Guard: guard,
+      } = row;
       const name = `${firstName} ${lastName}`;
       return { timestamp, studentId, name, violation, course, year, guard };
-    })
+    });
 
     res.status(200).send({ success: true, data: newRows });
-  })
-}
+  });
+};
 
 const getTimeStatsQuery = (range) => {
   let timeAgo;
   switch (range) {
-    case 'week':
+    case "week":
       timeAgo = `"weekday 1", "-7 days"`;
       break;
-    case 'month':
+    case "month":
       timeAgo = `"start of month"`;
       break;
-    case 'year':
+    case "year":
       timeAgo = `"start of year"`;
       break;
   }
@@ -66,19 +75,19 @@ const getTimeStatsQuery = (range) => {
     ORDER BY
       violationTime
     ASC;
-  `
-}
+  `;
+};
 
 const getGuardStatsQuery = (range) => {
   let timeAgo;
   switch (range) {
-    case 'week':
+    case "week":
       timeAgo = `"weekday 1", "-7 days"`;
       break;
-    case 'month':
+    case "month":
       timeAgo = `"start of month"`;
       break;
-    case 'year':
+    case "year":
       timeAgo = `"start of year"`;
       break;
   }
@@ -96,19 +105,19 @@ const getGuardStatsQuery = (range) => {
     ORDER BY
       violationGuard
     ASC;
-`
-}
+`;
+};
 
 const getViolationStatsQuery = (range) => {
   let timeAgo;
   switch (range) {
-    case 'week':
+    case "week":
       timeAgo = `"weekday 1", "-7 days"`;
       break;
-    case 'month':
+    case "month":
       timeAgo = `"start of month"`;
       break;
-    case 'year':
+    case "year":
       timeAgo = `"start of year"`;
       break;
   }
@@ -132,19 +141,19 @@ const getViolationStatsQuery = (range) => {
     ORDER BY 
       count 
     DESC;
-  `
-}
+  `;
+};
 
 const getCourseYearStatsQuery = (range) => {
   let timeAgo;
   switch (range) {
-    case 'week':
+    case "week":
       timeAgo = `"weekday 1", "-7 days"`;
       break;
-    case 'month':
+    case "month":
       timeAgo = `"start of month"`;
       break;
-    case 'year':
+    case "year":
       timeAgo = `"start of year"`;
       break;
   }
@@ -174,107 +183,117 @@ const getCourseYearStatsQuery = (range) => {
     ORDER BY 
       studentCourse
     ASC;
-  `
-}
+  `;
+};
 
 const getViolationStatsWeek = (req, res, next) => {
-  db.all(getViolationStatsQuery('week'), [], (err, rows) => {
+  db.all(getViolationStatsQuery("week"), [], (err, rows) => {
     if (err) return console.error(err);
-    res.locals.week = rows
-    next()
-  })
-}
+    res.locals.week = rows;
+    next();
+  });
+};
 const getViolationStatsMonth = (req, res, next) => {
-  db.all(getViolationStatsQuery('month'), [], (err, rows) => {
+  db.all(getViolationStatsQuery("month"), [], (err, rows) => {
     if (err) return console.error(err);
     res.locals.month = rows;
-    next()
-  })
-}
+    next();
+  });
+};
 const getViolationStatsYear = (req, res, next) => {
-  db.all(getViolationStatsQuery('year'), [], (err, rows) => {
+  db.all(getViolationStatsQuery("year"), [], (err, rows) => {
     if (err) return console.error(err);
 
     res.locals.year = rows;
     next();
-  })
-}
+  });
+};
 
 // ================================================= >
 
 const getCourseAndYearStatsWeek = (req, res, next) => {
-  db.all(getCourseYearStatsQuery('week'), [], (err, rows) => {
+  db.all(getCourseYearStatsQuery("week"), [], (err, rows) => {
     if (err) return console.error(err);
-    res.locals.week = rows
-    next()
-  })
-}
+    res.locals.week = rows;
+    next();
+  });
+};
 const getCourseAndYearStatsMonth = (req, res, next) => {
-  db.all(getCourseYearStatsQuery('month'), [], (err, rows) => {
+  db.all(getCourseYearStatsQuery("month"), [], (err, rows) => {
     if (err) return console.error(err);
-    res.locals.month = rows
-    next()
-  })
-}
+    res.locals.month = rows;
+    next();
+  });
+};
 const getCourseAndYearStatsYear = (req, res, next) => {
-  db.all(getCourseYearStatsQuery('year'), [], (err, rows) => {
+  db.all(getCourseYearStatsQuery("year"), [], (err, rows) => {
     if (err) return console.error(err);
-    res.status(200).send({ success: true, data: { week: res.locals.week, month: res.locals.month, year: rows } });
-  })
-}
+    res
+      .status(200)
+      .send({
+        success: true,
+        data: { week: res.locals.week, month: res.locals.month, year: rows },
+      });
+  });
+};
 
 // ================================================= >
 
 const getTimeStatsWeek = (req, res, next) => {
-  db.all(getTimeStatsQuery('week'), [], (err, rows) => {
+  db.all(getTimeStatsQuery("week"), [], (err, rows) => {
     if (err) return console.error(err);
-    res.locals.week = rows
-    next()
-  })
-}
+    res.locals.week = rows;
+    next();
+  });
+};
 const getTimeStatsMonth = (req, res, next) => {
-  db.all(getTimeStatsQuery('month'), [], (err, rows) => {
+  db.all(getTimeStatsQuery("month"), [], (err, rows) => {
     if (err) return console.error(err);
-    res.locals.month = rows
-    next()
-  })
-}
+    res.locals.month = rows;
+    next();
+  });
+};
 const getTimeStatsYear = (req, res, next) => {
-  db.all(getTimeStatsQuery('year'), [], (err, rows) => {
+  db.all(getTimeStatsQuery("year"), [], (err, rows) => {
     if (err) return console.error(err);
-    res.status(200).send({ success: true, data: { week: res.locals.week, month: res.locals.month, year: rows } });
-  })
-}
+    res
+      .status(200)
+      .send({
+        success: true,
+        data: { week: res.locals.week, month: res.locals.month, year: rows },
+      });
+  });
+};
 
 // ================================================= >
 
 const getGuardStatsWeek = (req, res, next) => {
-  db.all(getGuardStatsQuery('week'), [], (err, rows) => {
-    if (err) return res.status(500).send({ success: false, message: err })
-    res.locals.week = rows
-    next()
-  })
-}
+  db.all(getGuardStatsQuery("week"), [], (err, rows) => {
+    if (err) return res.status(500).send({ success: false, message: err });
+    res.locals.week = rows;
+    next();
+  });
+};
 const getGuardStatsMonth = (req, res, next) => {
-  db.all(getGuardStatsQuery('month'), [], (err, rows) => {
-    if (err) return res.status(500).send({ success: false, message: err })
-    res.locals.month = rows
-    next()
-  })
-}
+  db.all(getGuardStatsQuery("month"), [], (err, rows) => {
+    if (err) return res.status(500).send({ success: false, message: err });
+    res.locals.month = rows;
+    next();
+  });
+};
 const getGuardStatsYear = (req, res, next) => {
-  db.all(getGuardStatsQuery('year'), [], (err, rows) => {
-    if (err) return res.status(500).send({ success: false, message: err })
+  db.all(getGuardStatsQuery("year"), [], (err, rows) => {
+    if (err) return res.status(500).send({ success: false, message: err });
     res.status(200).send({
       success: true,
       data: {
         week: res.locals.week,
         month: res.locals.month,
-        year: rows
-      }
-    })
-  })
-}
+        year: rows,
+      },
+    });
+  });
+};
 
 // ================================================= >
 
@@ -285,16 +304,21 @@ const registerViolation = (req, res, next) => {
       ViolationsDesc(Violation, Number, IsMajor) 
     VALUES
       (?, ?, ?);
-  `
+  `;
 
   db.run(sql, values, (err, result) => {
     if (err) {
-      if (err.errno === 19) res.status(400).send({ success: false, message: "Violation already exists" })
+      if (err.errno === 19)
+        res
+          .status(400)
+          .send({ success: false, message: "Violation already exists" });
     } else {
-      res.status(200).send({ success: true, message: "Violation successfully registered" })
+      res
+        .status(200)
+        .send({ success: true, message: "Violation successfully registered" });
     }
-  })
-}
+  });
+};
 const registerGuard = (req, res, next) => {
   const values = Object.values(req.body);
   sql = `
@@ -302,17 +326,22 @@ const registerGuard = (req, res, next) => {
       Guard(firstname, lastname) 
     VALUES
       (?, ?);
-  `
+  `;
 
   db.run(sql, values, (err, result) => {
-    console.log(err, result)
+    console.log(err, result);
     if (err) {
-      if (err.errno === 19) res.status(400).send({ success: false, message: "Guard already exists" })
+      if (err.errno === 19)
+        res
+          .status(400)
+          .send({ success: false, message: "Guard already exists" });
     } else {
-      res.status(200).send({ success: true, message: "Guard successfully registered" })
+      res
+        .status(200)
+        .send({ success: true, message: "Guard successfully registered" });
     }
-  })
-}
+  });
+};
 
 module.exports = {
   getCourseAndYearStatsWeek,
@@ -329,5 +358,5 @@ module.exports = {
   getViolationStatsMonth,
   getViolationStatsYear,
   registerGuard,
-  registerViolation
+  registerViolation,
 };

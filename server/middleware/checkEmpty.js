@@ -4,11 +4,13 @@ const checkEmpty = (req, res, next) => {
 
   values.forEach((value) => {
     if (!value) hasEmptyValue = true;
-  })
+  });
 
   hasEmptyValue
-    ? res.status(400).send({ success: false, message: "Please submit non empty fields" })
-    : next()
-}
+    ? res
+        .status(400)
+        .send({ success: false, message: "Please submit non empty fields" })
+    : next();
+};
 
 module.exports = checkEmpty;

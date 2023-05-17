@@ -1,8 +1,9 @@
-const _ = require('lodash');
-const date_fns = require('date-fns');
-const db = require('./connect.js');
+const _ = require("lodash");
+const date_fns = require("date-fns");
+const db = require("./connect.js");
 
-let sql = 'INSERT INTO Violations (StudentId, Violation, Guard, Timestamp) VALUES'
+let sql =
+  "INSERT INTO Violations (StudentId, Violation, Guard, Timestamp) VALUES";
 
 let studentIds = [];
 
@@ -67,8 +68,7 @@ const violationsMinor = [
   `Non-presentation of school I.D. within the campus upon request by a security office/ guard or any member of the school personnel`,
   `Non-presentation of school I.D. within the campus upon request by a security office/ guard or any member of the school personnel`,
   `Non-presentation of school I.D. within the campus upon request by a security office/ guard or any member of the school personnel`,
-]
-
+];
 
 /* Create bias agains N/A because it is the guards who usually spot violations*/
 const guards = [
@@ -129,26 +129,30 @@ const guards = [
   "Ronaldo Villacruel",
   "Ronaldo Villacruel",
   "Ronaldo Villacruel",
-]
+];
 
 const randomDate = (start, end) => {
-  let date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-  date = date_fns.format(date, 'yyyy-MM-dd HH:mm:ss')
+  let date = new Date(
+    start.getTime() + Math.random() * (end.getTime() - start.getTime())
+  );
+  date = date_fns.format(date, "yyyy-MM-dd HH:mm:ss");
 
   /* Do not allow Sundays */
   if (date_fns.isSunday(date_fns.parseISO(date))) return randomDate(start, end);
 
   /* Only between 6:00 and 18:00 */
-  if (!(date_fns.parseISO(date).getHours() >= 6) || !(date_fns.parseISO(date).getHours() <= 18)) return randomDate(start, end);
+  if (
+    !(date_fns.parseISO(date).getHours() >= 6) ||
+    !(date_fns.parseISO(date).getHours() <= 18)
+  )
+    return randomDate(start, end);
 
-  return date
-}
+  return date;
+};
 
-db.all('SELECT StudentId from Students', (err, rows) => {
-  err
-    ? console.log(err)
-    : studentIds = rows.map(row => row.StudentId)
-})
+db.all("SELECT StudentId from Students", (err, rows) => {
+  err ? console.log(err) : (studentIds = rows.map((row) => row.StudentId));
+});
 
 const getRandomData = () => {
   let studentId = _.sample(studentIds);
@@ -158,36 +162,34 @@ const getRandomData = () => {
 
   /* Guards usually only spot minor violations */
   guard !== "N/A"
-    ? violation = _.sample(violationsMinor)
-    : violation = _.sample(violationsMajor);
+    ? (violation = _.sample(violationsMinor))
+    : (violation = _.sample(violationsMajor));
 
   /* surround data with quotes for sql */
   let randomData = [studentId, violation, guard, timestamp];
   violation.includes(`"`)
-    ? randomData = randomData.map(data => `'${data}'`)
-    : randomData = randomData.map(data => `"${data}"`)
+    ? (randomData = randomData.map((data) => `'${data}'`))
+    : (randomData = randomData.map((data) => `"${data}"`));
 
   return randomData;
-}
+};
 
 const amountOfData = 65536;
-
 
 setTimeout(() => {
   for (let i = 0; i < amountOfData; i++) {
     let randomData = getRandomData();
 
     if (i === amountOfData - 1) {
-      sql += `(${randomData.join(', ')})`
+      sql += `(${randomData.join(", ")})`;
     } else {
-      sql += `(${randomData.join(', ')}), `
+      sql += `(${randomData.join(", ")}), `;
     }
   }
 
   db.run(sql, (err) => {
     if (err) {
-      console.log(err)
+      console.log(err);
     }
   });
 }, 4000);
-
